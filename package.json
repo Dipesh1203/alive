@@ -1,5 +1,5 @@
 {
-  "name": "Vigilant",
+  "name": "Alive",
   "private": true,
   "scripts": {
     "build": "turbo run build",

@@ -15,7 +15,15 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "passThroughEnv": [
+        "GOCACHE",
+        "GOPATH",
+        "GOROOT",
+        "LocalAppData",
+        "HOME",
+        "PATH"
+      ]
     }
   }
 }
