@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "build": "go build -o bin/server main.go",
-    "dev": "go run main.go",
+    "dev": "go run cmd/server/main.go",
     "start": "./bin/server.exe",
-    "lint": "go vet ./..."
-  }
+    "lint": "go vet ./...",
+    "generate": "go run github.com/steebchen/prisma-client-go generate"
+  },
+  "dependencies": {}
 }

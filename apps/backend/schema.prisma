@@ -1,0 +1,41 @@
+generator db {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model website{
+  id String @id @default(uuid())
+  websiteName String
+  url String
+  ticks websiteTicks[]  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+   
+}
+
+model region{
+  regionId String @id @default(uuid())
+  regionName String 
+  ticks      websiteTicks[]
+  createdAt DateTime @default(now())
+}
+
+enum websiteStatus{
+  Up
+  Down
+  Unknown
+}
+
+model websiteTicks{
+  id Int @id @default(autoincrement())
+  websiteId String
+  website website @relation(fields: [websiteId],references: [id])
+  upStatus websiteStatus @default(Unknown)
+  latency Int?
+  websiteRegionId String
+  region region @relation(fields:[websiteRegionId],references:[regionId])
+}
