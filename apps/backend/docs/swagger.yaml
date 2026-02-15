@@ -1,0 +1,320 @@
+basePath: /
+definitions:
+  internal_handlers.CreateRegionRequest:
+    properties:
+      regionName:
+        type: string
+    type: object
+  internal_handlers.CreateWebsiteRequest:
+    properties:
+      url:
+        type: string
+      websiteName:
+        type: string
+    type: object
+  internal_handlers.UpdateRegionReq:
+    properties:
+      regionName:
+        type: string
+    type: object
+  internal_handlers.UpdateWebsiteReq:
+    properties:
+      url:
+        type: string
+      websiteName:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  title: My API Name
+  version: "1.0"
+paths:
+  /api/regions:
+    get:
+      description: Fetches all regions
+      produces:
+      - application/json
+      responses:
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List regions
+      tags:
+      - regions
+    post:
+      consumes:
+      - application/json
+      description: Takes a region name and saves it to the DB via Prisma
+      parameters:
+      - description: Create region request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.CreateRegionRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new region
+      tags:
+      - regions
+  /api/regions/{id}:
+    delete:
+      description: Deletes a region by id
+      parameters:
+      - description: Region ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a region
+      tags:
+      - regions
+    get:
+      description: Fetches a region by id
+      parameters:
+      - description: Region ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a region
+      tags:
+      - regions
+    put:
+      consumes:
+      - application/json
+      description: Updates region name by id
+      parameters:
+      - description: Region ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update region request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.UpdateRegionReq'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a region
+      tags:
+      - regions
+  /api/websites:
+    get:
+      description: Fetches all websites
+      produces:
+      - application/json
+      responses:
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List websites
+      tags:
+      - websites
+    post:
+      consumes:
+      - application/json
+      description: Takes a website name/URL and saves it to the DB via Prisma
+      parameters:
+      - description: Create website request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.CreateWebsiteRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new website
+      tags:
+      - websites
+    put:
+      consumes:
+      - application/json
+      description: Updates website name and/or URL by id
+      parameters:
+      - description: Update website request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.UpdateWebsiteReq'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a website
+      tags:
+      - websites
+  /api/websites/{id}:
+    delete:
+      description: Deletes a website by id
+      parameters:
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a website
+      tags:
+      - websites
+    get:
+      description: Fetches a website by id
+      parameters:
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a website
+      tags:
+      - websites
+swagger: "2.0"
