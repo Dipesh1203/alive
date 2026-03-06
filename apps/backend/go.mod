@@ -23,6 +23,7 @@ require (
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.9.1 // indirect
+	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/steebchen/prisma-client-go v0.47.0 // indirect
 	github.com/swaggo/files v1.0.1 // indirect

@@ -28,7 +28,8 @@ func Router(database *db.PrismaClient) *mux.Router {
 	router.HandleFunc("/api/regions/{id}", handlers.GetRegion(database)).Methods("GET")
 	router.HandleFunc("/api/regions/{id}", handlers.UpdateRegion(database)).Methods("PUT")
 	router.HandleFunc("/api/regions/{id}", handlers.DeleteRegion(database)).Methods("DELETE")
-
+	
+	router.HandleFunc("/api/test", handlers.GetWebsiteDetails(database)).Methods("POST");
 
 
 	return router

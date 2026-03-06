@@ -11,6 +11,7 @@ model website{
   id String @id @default(uuid())
   websiteName String
   url String
+  status websiteStatus @default(Unknown)
   ticks websiteTicks[]  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
