@@ -38,9 +38,9 @@ func main() {
 	// ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	// defer stop()
 	// go services.StartMonitoring(ctx, client)
-	fmt.Println("Backend Running on :3000")
+	fmt.Println("Backend Running on :8000")
 
 	r := router.Router(client)
 
-	log.Fatal(http.ListenAndServe(":3000", r))
+	log.Fatal(http.ListenAndServe(":8000", r))
 }
