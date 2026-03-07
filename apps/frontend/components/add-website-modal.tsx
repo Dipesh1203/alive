@@ -15,33 +15,55 @@ import {
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Checkbox } from './ui/checkbox'
-import { mockRegions } from '../lib/mock-data'
+import { createWebsite, fetchRegions } from '../lib/api'
+import type { Region } from '../lib/mock-data'
 
 interface AddWebsiteModalProps {
-  onAdd?: (data: { name: string; url: string; regions: string[] }) => void
+  onCreated?: () => void
 }
 
-export function AddWebsiteModal({ onAdd }: AddWebsiteModalProps) {
+export function AddWebsiteModal({ onCreated }: AddWebsiteModalProps) {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingRegions, setIsLoadingRegions] = useState(false)
+  const [regions, setRegions] = useState<Region[]>([])
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
-  const [selectedRegions, setSelectedRegions] = useState<string[]>(['us-east-1'])
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([])
+
+  const loadRegions = async () => {
+    setIsLoadingRegions(true)
+    try {
+      const regionOptions = await fetchRegions()
+      setRegions(regionOptions)
+      const firstRegion = regionOptions.at(0)
+      if (firstRegion) {
+        setSelectedRegions([firstRegion.id])
+      }
+    } finally {
+      setIsLoadingRegions(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      await createWebsite({
+        websiteName: name,
+        url,
+      })
 
-    onAdd?.({ name, url, regions: selectedRegions })
+      onCreated?.()
 
-    setIsLoading(false)
-    setOpen(false)
-    setName('')
-    setUrl('')
-    setSelectedRegions(['us-east-1'])
+      setOpen(false)
+      setName('')
+      setUrl('')
+      setSelectedRegions(regions[0] ? [regions[0].id] : [])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const toggleRegion = (regionId: string) => {
@@ -53,7 +75,15 @@ export function AddWebsiteModal({ onAdd }: AddWebsiteModalProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen)
+        if (nextOpen && regions.length === 0) {
+          void loadRegions()
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 size-4" />
@@ -102,7 +132,10 @@ export function AddWebsiteModal({ onAdd }: AddWebsiteModalProps) {
             <div className="grid gap-2">
               <Label>Monitoring Regions</Label>
               <div className="grid grid-cols-2 gap-2 rounded-lg border border-border p-3">
-                {mockRegions.filter(r => r.available).map((region) => (
+                {isLoadingRegions && (
+                  <p className="col-span-2 text-xs text-muted-foreground">Loading regions...</p>
+                )}
+                {regions.filter(r => r.available).map((region) => (
                   <div key={region.id} className="flex items-center space-x-2">
                     <Checkbox
                       id={region.id}

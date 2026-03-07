@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import { AlertCircle, CheckCircle2, Clock, AlertTriangle, Filter } from 'lucide-react'
 import { DashboardLayout } from '../../components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
@@ -21,69 +22,10 @@ import {
   TableRow,
 } from '../../components/ui/table'
 import { cn } from '../../lib/utils'
-import { getWebsites } from '../../lib/mock-data'
+import { fetchAllWebsiteDetails } from '../../lib/api'
+import type { Incident, WebsiteDetails } from '../../lib/mock-data'
 
-// Generate mock incidents for all websites
-function generateIncidents() {
-  const websites = getWebsites()
-  const incidents = []
-
-  for (const website of websites) {
-    // Generate 2-4 incidents per website
-    const numIncidents = Math.floor(Math.random() * 3) + 2
-
-    for (let i = 0; i < numIncidents; i++) {
-      const daysAgo = Math.floor(Math.random() * 30) + 1
-      const duration = Math.floor(Math.random() * 120) + 5
-      const types = ['downtime', 'degraded', 'timeout'] as const
-      const type = types[Math.floor(Math.random() * types.length)]
-
-      incidents.push({
-        id: `${website.id}-${i}`,
-        websiteId: website.id,
-        websiteName: website.name,
-        websiteUrl: website.url,
-        startTime: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString(),
-        endTime: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000 + duration * 60 * 1000).toISOString(),
-        duration,
-        type,
-        description: getDescription(type),
-        resolved: true,
-      })
-    }
-  }
-
-  // Sort by start time, most recent first
-  return incidents.sort((a, b) =>
-    new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
-  )
-}
-
-function getDescription(type: 'downtime' | 'degraded' | 'timeout') {
-  const descriptions = {
-    downtime: [
-      'Server returned 503 Service Unavailable',
-      'Connection refused by remote server',
-      'DNS resolution failed',
-      'Server returned 500 Internal Server Error',
-    ],
-    degraded: [
-      'High latency detected (>500ms)',
-      'Slow response times across multiple regions',
-      'Partial service degradation',
-      'Elevated error rate detected',
-    ],
-    timeout: [
-      'Connection timeout from EU-West region',
-      'Request timeout after 30 seconds',
-      'TCP connection timeout',
-      'SSL handshake timeout',
-    ],
-  }
-
-  const options = descriptions[type]
-  return options[Math.floor(Math.random() * options.length)]
-}
+type IncidentListRow = Incident & { websiteName: string; websiteUrl: string }
 
 const typeConfig = {
   downtime: {
@@ -104,11 +46,47 @@ const typeConfig = {
 }
 
 export default function IncidentsPage() {
-  const incidents = generateIncidents()
+  const [websites, setWebsites] = useState<WebsiteDetails[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadIncidents = async () => {
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        const websiteDetails = await fetchAllWebsiteDetails()
+        setWebsites(websiteDetails)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load incidents')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    void loadIncidents()
+  }, [])
+
+  const incidents = useMemo<IncidentListRow[]>(() => {
+    const rows = websites.flatMap((website) =>
+      website.incidents.map((incident) => ({
+        ...incident,
+        websiteName: website.name,
+        websiteUrl: website.url,
+      })),
+    )
+
+    return rows.sort((a, b) =>
+      new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
+    )
+  }, [websites])
 
   const totalIncidents = incidents.length
   const downtimeIncidents = incidents.filter(i => i.type === 'downtime').length
-  const avgDuration = Math.round(incidents.reduce((sum, i) => sum + i.duration, 0) / incidents.length)
+  const avgDuration = incidents.length
+    ? Math.round(incidents.reduce((sum, i) => sum + i.duration, 0) / incidents.length)
+    : 0
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -138,6 +116,9 @@ export default function IncidentsPage() {
             </p>
           </div>
         </div>
+
+        {isLoading && <p className="text-sm text-muted-foreground">Loading incidents...</p>}
+        {error && <p className="text-sm text-down">{error}</p>}
 
         {/* Stats cards */}
         <div className="grid gap-4 md:grid-cols-4">

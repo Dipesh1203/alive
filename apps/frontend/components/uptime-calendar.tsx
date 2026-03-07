@@ -49,7 +49,9 @@ export function UptimeCalendar({ data, title = "Uptime History", description = "
   }
 
   // Calculate overall uptime for the period
-  const overallUptime = data.reduce((sum, day) => sum + day.uptime, 0) / data.length
+  const overallUptime = data.length
+    ? data.reduce((sum, day) => sum + day.uptime, 0) / data.length
+    : 100
 
   return (
     <Card>

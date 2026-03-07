@@ -33,9 +33,11 @@ export function LatencyChart({ data, title = "Response Time", description = "Las
     latency: point.latency,
   }))
 
-  const avgLatency = Math.round(data.reduce((sum, p) => sum + p.latency, 0) / data.length)
-  const maxLatency = Math.max(...data.map(p => p.latency))
-  const minLatency = Math.min(...data.map(p => p.latency))
+  const avgLatency = data.length
+    ? Math.round(data.reduce((sum, p) => sum + p.latency, 0) / data.length)
+    : 0
+  const maxLatency = data.length ? Math.max(...data.map(p => p.latency)) : 0
+  const minLatency = data.length ? Math.min(...data.map(p => p.latency)) : 0
 
   return (
     <Card>

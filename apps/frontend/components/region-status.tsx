@@ -33,7 +33,7 @@ export function RegionStatus({ regions, title = "Region Status", description = "
   }
 
   const avgLatency = Math.round(
-    regions.reduce((sum, r) => sum + r.latency, 0) / regions.length
+    regions.length ? regions.reduce((sum, r) => sum + r.latency, 0) / regions.length : 0
   )
 
   return (

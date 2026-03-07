@@ -1,11 +1,35 @@
+"use client"
+
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../components/dashboard-layout'
 import { WebsiteCard } from '../../components/website-card'
 import { AddWebsiteModal } from '../../components/add-website-modal'
-import { getWebsites } from '../../lib/mock-data'
+import { fetchWebsites } from '../../lib/api'
+import type { Website } from '../../lib/mock-data'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 
 export default function WebsitesPage() {
-  const websites = getWebsites()
+  const [websites, setWebsites] = useState<Website[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const loadWebsites = async () => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetchWebsites()
+      setWebsites(response)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load websites')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    void loadWebsites()
+  }, [])
 
   const allWebsites = websites
   const activeWebsites = websites.filter(w => w.monitoringEnabled)
@@ -21,8 +45,16 @@ export default function WebsitesPage() {
               Manage and monitor all your configured endpoints
             </p>
           </div>
-          <AddWebsiteModal />
+          <AddWebsiteModal onCreated={loadWebsites} />
         </div>
+
+        {isLoading && (
+          <p className="text-sm text-muted-foreground">Loading websites...</p>
+        )}
+
+        {error && (
+          <p className="text-sm text-down">{error}</p>
+        )}
 
         <Tabs defaultValue="all">
           <TabsList>

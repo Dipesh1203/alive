@@ -1,9 +1,9 @@
 'use client'
 
 import { use } from 'react'
-import { notFound } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, ExternalLink, Clock, Globe, Activity } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Clock, Activity } from 'lucide-react'
 import { LatencyChart } from '../../../components/latency-chart'
 import { UptimeCalendar } from '../../../components/uptime-calendar'
 import { RegionStatus } from '../../../components/region-status'
@@ -13,7 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Switch } from '../../../components/ui/switch'
 import { Badge } from '../../../components/ui/badge'
 import { cn } from '../../../lib/utils'
-import { getWebsiteDetails } from '../../../lib/mock-data'
+import { fetchWebsiteDetails, toggleWebsiteMonitoring } from '../../../lib/api'
+import type { WebsiteDetails } from '../../../lib/mock-data'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 
 interface WebsiteDetailPageProps {
@@ -22,10 +23,61 @@ interface WebsiteDetailPageProps {
 
 export default function WebsiteDetailPage({ params }: WebsiteDetailPageProps) {
   const { id } = use(params)
-  const website = getWebsiteDetails(id)
+  const [website, setWebsite] = useState<WebsiteDetails | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isToggling, setIsToggling] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadWebsite = async () => {
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        const details = await fetchWebsiteDetails(id)
+        setWebsite(details)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load website details')
+        setWebsite(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    void loadWebsite()
+  }, [id])
+
+  const handleToggleMonitoring = async () => {
+    if (!website) return
+
+    setIsToggling(true)
+    setError(null)
+
+    try {
+      await toggleWebsiteMonitoring(website.id)
+      const details = await fetchWebsiteDetails(website.id)
+      setWebsite(details)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to toggle monitoring')
+    } finally {
+      setIsToggling(false)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <DashboardLayout title="Website Details">
+        <p className="text-sm text-muted-foreground">Loading website details...</p>
+      </DashboardLayout>
+    )
+  }
 
   if (!website) {
-    notFound()
+    return (
+      <DashboardLayout title="Website Details">
+        <p className="text-sm text-down">{error ?? 'Website not found'}</p>
+      </DashboardLayout>
+    )
   }
 
   const statusConfig = {
@@ -98,6 +150,8 @@ export default function WebsiteDetailPage({ params }: WebsiteDetailPageProps) {
           </div>
         </div>
 
+        {error && <p className="text-sm text-down">{error}</p>}
+
         {/* Overview cards */}
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
@@ -157,7 +211,11 @@ export default function WebsiteDetailPage({ params }: WebsiteDetailPageProps) {
                     {website.monitoringEnabled ? 'Active' : 'Paused'}
                   </span>
                 </div>
-                <Switch checked={website.monitoringEnabled} />
+                <Switch
+                  checked={website.monitoringEnabled}
+                  onCheckedChange={handleToggleMonitoring}
+                  disabled={isToggling}
+                />
               </div>
               <p className="text-xs text-muted-foreground mt-2">
                 Toggle to pause/resume monitoring

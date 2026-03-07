@@ -117,7 +117,7 @@ function generateUptimeCalendar(days: number = 90): UptimeDay[] {
     }
     
     data.push({
-      date: date.toISOString().split('T')[0],
+      date: date.toISOString().split('T')[0] ?? date.toISOString(),
       status,
       uptime: Math.round(uptime * 100) / 100,
     })
