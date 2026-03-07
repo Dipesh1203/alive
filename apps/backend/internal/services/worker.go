@@ -4,7 +4,9 @@ import (
 	"backend/db"
 	"context"
 	"fmt"
+	"log"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -24,9 +26,14 @@ type Site struct {
 func StartMonitoring(ctx context.Context, prisma *db.PrismaClient) {
 	taskChannel := make(chan Site, 10)
 	resultsChannel := make(chan ResultResponse, 10)
-
+	var wg sync.WaitGroup
 	for w := 1; w <= 3; w++ {
-		go MonitoringWorker(w, taskChannel, resultsChannel, prisma, ctx)
+		log.Printf("Starting worker %d\n", w)
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			MonitoringWorker(w, taskChannel, resultsChannel, prisma, ctx)
+		}(w)
 	}
 
 	go func() {
@@ -37,29 +44,41 @@ func StartMonitoring(ctx context.Context, prisma *db.PrismaClient) {
 
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
+	fetchAndDispatch(ctx, prisma, taskChannel)
 
-	for range ticker.C {
-		activeWebsites, err := prisma.Website.FindMany().Exec(ctx)
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("Monitoring service received shutdown signal")
+			close(taskChannel)
+			wg.Wait()
+			close(taskChannel)
+			return
+		case <-ticker.C:
+			fetchAndDispatch(ctx, prisma, taskChannel)
+
+		}
+	}
+}
+
+func fetchAndDispatch(ctx context.Context, prisma *db.PrismaClient, taskChannel chan<- Site) {
+	activeWebsites, err := prisma.Website.FindMany().Exec(ctx)
+	if err != nil {
+		log.Println("Error fetching websites:", err)
+		return
+	}
+
+	for _, site := range activeWebsites {
+		regions, err := prisma.Region.FindMany().Exec(ctx)
 		if err != nil {
-			fmt.Println("Error fetching websites: ", err)
 			continue
 		}
-		for _, site := range activeWebsites {
-			regions, err := prisma.Region.FindMany(
-				db.Region.Ticks.Some(
-					db.WebsiteTicks.WebsiteID.Equals(site.ID),
-				),
-			).Exec(ctx)
-			if err != nil || len(regions) == 0 {
-				fmt.Printf("No region found for website %s\n", site.ID)
-				continue
-			}
-			for _, region := range regions {
-				taskChannel <- Site{
-					ID:       site.ID,
-					Website:  site,
-					RegionID: region.RegionID,
-				}
+
+		for _, region := range regions {
+			taskChannel <- Site{
+				ID:       site.ID,
+				Website:  site,
+				RegionID: region.RegionID,
 			}
 		}
 	}
@@ -71,25 +90,30 @@ func MonitoringWorker(id int, jobs <-chan Site, results chan<- ResultResponse, p
 	}
 
 	for site := range jobs {
+		log.Printf("Worker %d: Checking website %s in region %s\n", id, site.Website.WebsiteName, site.RegionID)
 		startTime := time.Now()
 		res, err := client.Get(site.Website.URL)
 		latency := time.Since(startTime)
 
 		newStatus := db.WebsiteStatusUp
 		respMessage := "200 OK"
+		statusCode := 0
 
-		if err != nil || res == nil || res.StatusCode >= 400 {
+		if err != nil {
 			newStatus = db.WebsiteStatusDown
-			if err != nil {
-				respMessage = err.Error()
-			} else if res != nil {
-				respMessage = res.Status
-			}
+			respMessage = err.Error()
+			log.Printf("Worker %d: ERROR checking %s - %v", id, site.Website.URL, err)
 		} else {
 			respMessage = res.Status
-
-			res.Body.Close()
+			statusCode = res.StatusCode
+			respMessage = res.Status
+			defer res.Body.Close()
+			if res.StatusCode >= 400 {
+				newStatus = db.WebsiteStatusDown
+			}
 		}
+
+		log.Printf("Worker %d: Checked website %s - Status: %s, Latency: %v\n, status code: %d", id, site.Website.URL, newStatus, latency, statusCode)
 
 		if newStatus != site.Website.Status {
 			_, err := prisma.WebsiteTicks.CreateOne(
@@ -105,7 +129,7 @@ func MonitoringWorker(id int, jobs <-chan Site, results chan<- ResultResponse, p
 					Exec(ctx)
 			}
 		}
-
+		log.Printf("Worker %d: Finished checking website %s - Status: %s, Latency: %v\n", id, site.Website.WebsiteName, newStatus, latency)
 		results <- ResultResponse{
 			WebsiteID: site.ID,
 			Status:    newStatus,

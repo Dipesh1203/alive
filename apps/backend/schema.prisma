@@ -13,6 +13,7 @@ model website{
   url String
   status websiteStatus @default(Unknown)
   ticks websiteTicks[]  
+  isMonitoringEnabled Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
    
@@ -23,6 +24,7 @@ model region{
   regionName String 
   ticks      websiteTicks[]
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum websiteStatus{
@@ -39,4 +41,6 @@ model websiteTicks{
   latency Int?
   websiteRegionId String
   region region @relation(fields:[websiteRegionId],references:[regionId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -3,25 +3,25 @@ package main
 import (
 	"backend/db"
 	_ "backend/docs"
-	router "backend/internal/routes"
-	"fmt"
+	"backend/internal/services"
+	"context"
 	"log"
-	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
 )
 
 // @title My API Name
 // @version 1.0
-// @host localhost:3000
+// @host localhost:3001
 // @BasePath /
 func main() {
 	//load env
 	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: No .env file found")
 	}
-
-	// Database Setup
 	client := db.NewClient()
 	if err := client.Prisma.Connect(); err != nil {
 		log.Fatal("Failed to connect to DB:", err)
@@ -32,15 +32,11 @@ func main() {
 			log.Printf("Error disconnecting: %v", err)
 		}
 	}()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	log.Println("Worker: Starting Monitoring Service...")
 
-	// RabbitMQ
-	// internal.SetupRabbitMq()
-	// ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	// defer stop()
-	// go services.StartMonitoring(ctx, client)
-	fmt.Println("Backend Running on :3000")
+	services.StartMonitoring(ctx, client)
 
-	r := router.Router(client)
-
-	log.Fatal(http.ListenAndServe(":3000", r))
+	log.Println("Worker: Shutting down gracefully")
 }
