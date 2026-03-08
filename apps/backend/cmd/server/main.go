@@ -4,6 +4,7 @@ import (
 	"backend/db"
 	_ "backend/docs"
 	router "backend/internal/routes"
+	"backend/internal/utils"
 	"fmt"
 	"log"
 	"net/http"
@@ -39,8 +40,8 @@ func main() {
 	// defer stop()
 	// go services.StartMonitoring(ctx, client)
 	fmt.Println("Backend Running on :8000")
-
 	r := router.Router(client)
+	handler := utils.CorsMiddleware(r)
 
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe(":8000", handler))
 }

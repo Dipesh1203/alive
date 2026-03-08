@@ -69,16 +69,41 @@ func fetchAndDispatch(ctx context.Context, prisma *db.PrismaClient, taskChannel 
 	}
 
 	for _, site := range activeWebsites {
-		regions, err := prisma.Region.FindMany().Exec(ctx)
+		markerTicks, err := prisma.WebsiteTicks.FindMany(
+			db.WebsiteTicks.WebsiteID.Equals(site.ID),
+			db.WebsiteTicks.UpStatus.Equals(db.WebsiteStatusUnknown),
+			db.WebsiteTicks.Latency.IsNull(),
+		).Exec(ctx)
 		if err != nil {
+			log.Printf("Error fetching region assignment markers for website %s: %v", site.ID, err)
 			continue
 		}
 
-		for _, region := range regions {
+		regionIDs := make([]string, 0)
+		seen := make(map[string]struct{})
+		for _, marker := range markerTicks {
+			if _, exists := seen[marker.WebsiteRegionID]; exists {
+				continue
+			}
+			seen[marker.WebsiteRegionID] = struct{}{}
+			regionIDs = append(regionIDs, marker.WebsiteRegionID)
+		}
+
+		if len(regionIDs) == 0 {
+			regions, err := prisma.Region.FindMany().Exec(ctx)
+			if err != nil {
+				continue
+			}
+			for _, region := range regions {
+				regionIDs = append(regionIDs, region.RegionID)
+			}
+		}
+
+		for _, regionID := range regionIDs {
 			taskChannel <- Site{
 				ID:       site.ID,
 				Website:  site,
-				RegionID: region.RegionID,
+				RegionID: regionID,
 			}
 		}
 	}
