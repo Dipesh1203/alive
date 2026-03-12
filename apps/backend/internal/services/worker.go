@@ -135,6 +135,9 @@ func MonitoringWorker(id int, jobs <-chan Site, results chan<- ResultResponse, p
 			defer res.Body.Close()
 			if res.StatusCode >= 400 {
 				newStatus = db.WebsiteStatusDown
+				fmt.Printf("Worker %d: Website %s returned status code %d\n", id, site.Website.URL, res.StatusCode)
+				fmt.Printf("Send Push notfication")
+
 			}
 		}
 
