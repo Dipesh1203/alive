@@ -317,3 +317,18 @@ export async function fetchAllWebsiteDetails(): Promise<WebsiteDetails[]> {
 
   return details
 }
+
+// User Login and Signup
+export async function login(username: string, password: string): Promise<void> {
+  await apiFetch('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+  })
+}
+
+export async function signup(username: string, password: string): Promise<void> {
+  await apiFetch('/api/auth/signup', {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+  })
+}

@@ -13,6 +13,7 @@ model website{
   url String
   status websiteStatus @default(Unknown)
   ticks websiteTicks[]  
+  notifications notification[]
   isMonitoringEnabled Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,6 +42,58 @@ model websiteTicks{
   latency Int?
   websiteRegionId String
   region region @relation(fields:[websiteRegionId],references:[regionId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model user{
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  devices devices[]
+  notifications notification[]
+  subscriptions subscription[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum notficationStatus{
+  Sent
+  Failed
+  Pending
+}
+
+model notification{
+  id String @id @default(uuid())
+  userId String
+  user user @relation(fields: [userId],references: [id])
+  websiteId String
+  website website @relation(fields: [websiteId],references: [id])
+  message String
+  metadata Json
+  status notficationStatus @default(Pending)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model subscription{
+  id String @id @default(uuid())
+  userId String
+  user user @relation(fields: [userId],references: [id])
+  topicArn String
+  deviceType String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId, topicArn])
+}
+
+model devices{
+  id String @id @default(uuid())
+  userId String
+  user user @relation(fields: [userId],references: [id])
+  endpointArn String @unique
+  fcmToken String @unique
+  deviceType String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

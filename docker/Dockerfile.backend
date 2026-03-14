@@ -1,0 +1,31 @@
+FROM golang:1.25-bookworm AS builder
+
+# Declare the ARG inside the builder stage
+ARG APP_NAME
+
+WORKDIR /usr/src/app
+
+# 1. Cache dependencies
+COPY ./apps/backend/go.mod ./apps/backend/go.sum ./
+RUN go mod download
+
+# 2. Copy source code
+COPY apps/backend/ .
+
+# 3. Generate Prisma & Swagger (Dynamic path using $)
+RUN go run github.com/steebchen/prisma-client-go generate
+RUN go run github.com/swaggo/swag/cmd/swag@v1.16.6 init -g cmd/${APP_NAME}/main.go --parseDependency --parseInternal
+
+# 4. Build - Note the $ sign for the variable
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o /out/app ./cmd/${APP_NAME}
+
+# --- Runtime Stage ---
+FROM gcr.io/distroless/static-debian12:nonroot
+
+# Copy the binary we just built (always named /out/app in the builder)
+COPY --from=builder /out/app /app
+
+EXPOSE 8000
+
+# Set the entrypoint to our binary
+ENTRYPOINT ["/app"]

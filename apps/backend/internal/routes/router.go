@@ -15,6 +15,10 @@ func Router(database *db.PrismaClient) *mux.Router {
 	// Health check endpoint
 	router.HandleFunc("/api/health", handlers.HealthCheck).Methods("GET")
 
+	// Auth endpoints
+	router.HandleFunc("/api/auth/signup", handlers.Signup(database)).Methods("POST")
+	router.HandleFunc("/api/auth/login", handlers.Login(database)).Methods("POST")
+
 	// Website endpoints
 	router.HandleFunc("/api/websites", handlers.CreateWebsite(database)).Methods("POST")
 	router.HandleFunc("/api/websites", handlers.ListWebsites(database)).Methods("GET")
@@ -38,6 +42,9 @@ func Router(database *db.PrismaClient) *mux.Router {
 	router.HandleFunc("/api/websites/{id}/regions", handlers.AssignWebsiteRegions(database)).Methods("PUT")
 
 	router.HandleFunc("/api/incidents", handlers.ListIncidents(database)).Methods("GET")
+	//user login and signup endpoints
+	router.HandleFunc("/api/auth/signup", handlers.Signup(database)).Methods("POST")
+	router.HandleFunc("/api/auth/login", handlers.Login(database)).Methods("POST")
 
 	// TODO(frontend): Needed for Notifications screen
 	// router.HandleFunc("/api/notifications/channels", handlers.CreateNotificationChannel(database)).Methods("POST")
