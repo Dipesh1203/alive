@@ -1,0 +1,42 @@
+name: Deploy Alive frontend
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.frontend
+          build-args: |
+            # IMPORTANT: Next.js needs this URL during the 'npm run build' phase
+            NEXT_PUBLIC_API_BASE_URL=http://${{ secrets.ROOT_IP }}:8080
+          push: true
+          tags: dipesh2009/alive-frontend:${{ github.sha }}
+
+      - name: Deploy to EC2
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            sudo docker pull dipesh2009/alive-frontend:${{ github.sha }}
+            
+            sudo docker stop alive_frontend 2>/dev/null || true
+            sudo docker rm alive_frontend 2>/dev/null || true
+            
+            # Note: We don't need -e here for NEXT_PUBLIC vars if they were in build-args
+            sudo docker run -d --name alive_frontend -p 3000:3000 \
+              dipesh2009/alive-frontend:${{ github.sha }}"

@@ -1,0 +1,45 @@
+name: Deploy Go Backend
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Updated to v4 for speed/security
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.backend
+          build-args: |
+            APP_NAME=server
+          push: true
+          tags: dipesh2009/go-backend:${{ github.sha }}, dipesh2009/go-backend:main
+
+      - name: Deploy to EC2 via SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            # Pull the new image
+            sudo docker pull dipesh2009/go-backend:${{ github.sha }}
+            
+            # Stop and remove old container
+            sudo docker stop backend_server 2>/dev/null || true
+            sudo docker rm backend_server 2>/dev/null || true
+            
+            # Run new container (Passing DB_URL here is secure)
+            sudo docker run --name backend_server -d \
+              -p 8080:8000 \
+              -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
+              dipesh2009/go-backend:${{ github.sha }}"
