@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: deploy-backend-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,4 +47,9 @@ jobs:
               -p 8080:8000 \
               -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
               dipesh2009/go-backend:${{ github.sha }}
-            sudo docker image prune -f"
+
+            # Remove only old backend images, keep current sha + stable tag.
+            sudo docker images dipesh2009/go-backend --format '{{.Repository}}:{{.Tag}}' | \
+              grep -v ':${{ github.sha }}$' | \
+              grep -v ':main$' | \
+              xargs -r sudo docker rmi || true"

@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: deploy-frontend-${{ github.ref }}
+  cancel-in-progress: false
+
 
 jobs:
   build:
@@ -26,7 +30,7 @@ jobs:
             # IMPORTANT: Next.js needs this URL during the 'npm run build' phase
             NEXT_PUBLIC_API_BASE_URL=http://${{ secrets.ROOT_IP }}:8080
           push: true
-          tags: dipesh2009/alive-frontend:${{ github.sha }}
+          tags: dipesh2009/alive-frontend:${{ github.sha }}, dipesh2009/alive-frontend:main
 
       - name: Deploy to EC2
         run: |
@@ -41,4 +45,9 @@ jobs:
             # Note: We don't need -e here for NEXT_PUBLIC vars if they were in build-args
             sudo docker run -d --name alive_frontend -p 3000:3000 \
               dipesh2009/alive-frontend:${{ github.sha }}
-            sudo docker image prune -f"
+
+            # Remove only old frontend images, keep current sha + stable tag.
+            sudo docker images dipesh2009/alive-frontend --format '{{.Repository}}:{{.Tag}}' | \
+              grep -v ':${{ github.sha }}$' | \
+              grep -v ':main$' | \
+              xargs -r sudo docker rmi || true"

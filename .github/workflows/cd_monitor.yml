@@ -1,47 +1,56 @@
-name: Deploy Monitoring Service Backend
-on:
-  push:
-    branches: [main]
+# name: Deploy Monitoring Service Backend
+# on:
+#   push:
+#     branches: [main]
+
+# concurrency:
+#   group: deploy-monitor-${{ github.ref }}
+#   cancel-in-progress: false
 
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Docker login
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       - name: Docker login
+#         uses: docker/login-action@v3
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/Dockerfile.backend
-          build-args: |
-            APP_NAME=monitor
-          push: true
-          tags: dipesh2009/monitoring-backend:${{ github.sha }}
+#       - name: Build and push
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: .
+#           file: ./docker/Dockerfile.backend
+#           build-args: |
+#             APP_NAME=monitor
+#           push: true
+#           tags: dipesh2009/monitoring-backend:${{ github.sha }}, dipesh2009/monitoring-backend:main
 
-      - name: Deploy to EC2
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
-          chmod 600 ~/ssh_key
-          # Note the change in naming and ports below
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
-            sudo docker pull dipesh2009/monitoring-backend:${{ github.sha }}
+#       - name: Deploy to EC2
+#         run: |
+#           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+#           chmod 600 ~/ssh_key
+#           # Note the change in naming and ports below
+#           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+#             sudo docker pull dipesh2009/monitoring-backend:${{ github.sha }}
             
-            # Use a unique name: monitoring_service
-            sudo docker stop monitoring_service 2>/dev/null || true
-            sudo docker rm monitoring_service 2>/dev/null || true
+#             # Use a unique name: monitoring_service
+#             sudo docker stop monitoring_service 2>/dev/null || true
+#             sudo docker rm monitoring_service 2>/dev/null || true
             
-            # Use a unique port: 8081 (mapping to internal 8000)
-            sudo docker run --name monitoring_service -d \
-              -p 8081:8000 \
-              -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
-              dipesh2009/monitoring-backend:${{ github.sha }}
-            sudo docker image prune -f"
+#             # Use a unique port: 8081 (mapping to internal 8000)
+#             sudo docker run --name monitoring_service -d \
+#               -p 8081:8000 \
+#               -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
+#               dipesh2009/monitoring-backend:${{ github.sha }}
+
+#             # Remove only old monitoring images, keep current sha + stable tag.
+#             sudo docker images dipesh2009/monitoring-backend --format '{{.Repository}}:{{.Tag}}' | \
+#               grep -v ':${{ github.sha }}$' | \
+#               grep -v ':main$' | \
+#               xargs -r sudo docker rmi || true"
