@@ -3,6 +3,11 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,4 +47,5 @@ jobs:
             sudo docker run --name monitoring_service -d \
               -p 8081:8000 \
               -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
-              dipesh2009/monitoring-backend:${{ github.sha }}"
+              dipesh2009/monitoring-backend:${{ github.sha }}
+            sudo docker image prune -f"

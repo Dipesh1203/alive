@@ -2,6 +2,10 @@ name: Deploy Go Backend
 on:
   push:
     branches: [main]
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
 
 jobs:
   build:
@@ -42,4 +46,5 @@ jobs:
             sudo docker run --name backend_server -d \
               -p 8080:8000 \
               -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
-              dipesh2009/go-backend:${{ github.sha }}"
+              dipesh2009/go-backend:${{ github.sha }}
+            sudo docker image prune -f"

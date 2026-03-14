@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,4 +43,5 @@ jobs:
             
             # Note: We don't need -e here for NEXT_PUBLIC vars if they were in build-args
             sudo docker run -d --name alive_frontend -p 3000:3000 \
-              dipesh2009/alive-frontend:${{ github.sha }}"
+              dipesh2009/alive-frontend:${{ github.sha }}
+            sudo docker image prune -f"
