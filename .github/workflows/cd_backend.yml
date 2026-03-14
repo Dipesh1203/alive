@@ -2,10 +2,6 @@ name: Deploy Go Backend
 on:
   push:
     branches: [main]
-concurrency:
-  group: production-deploy
-  cancel-in-progress: false
-
 
 jobs:
   build:

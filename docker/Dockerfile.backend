@@ -1,7 +1,7 @@
 FROM golang:1.25-bookworm AS builder
 
 # Declare the ARG inside the builder stage
-ARG APP_NAME
+ARG APP_NAME=server
 
 WORKDIR /usr/src/app
 
@@ -20,10 +20,19 @@ RUN go run github.com/swaggo/swag/cmd/swag@v1.16.6 init -g cmd/${APP_NAME}/main.
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -tags lambda -ldflags="-s -w" -o /out/app ./cmd/${APP_NAME}
 
 # --- Runtime Stage ---
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM debian:bookworm-slim
+
+# Prisma query engine requires glibc + OpenSSL runtime libraries.
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends ca-certificates libssl3 \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Copy the binary we just built (always named /out/app in the builder)
 COPY --from=builder /out/app /app
+
+# Drop root privileges for runtime.
+RUN useradd --system --uid 10001 --create-home appuser
+USER appuser
 
 EXPOSE 8000
 

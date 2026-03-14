@@ -1,14 +1,15 @@
 FROM node:20-alpine
 
 RUN npm install -g bun
-WORKDIR /user/src/app
+WORKDIR /usr/src/app
 
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 
-
 COPY package.json bun.lock turbo.json ./
+
 COPY packages ./packages
+
 COPY apps/frontend ./apps/frontend
 
 RUN bun install
@@ -16,5 +17,7 @@ RUN bun install
 RUN bun run build --filter=frontend...
 
 EXPOSE 3000
+
 WORKDIR /usr/src/app/apps/frontend
+
 CMD ["bun", "run", "dev"]
