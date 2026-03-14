@@ -17,7 +17,7 @@ RUN go run github.com/steebchen/prisma-client-go generate
 RUN go run github.com/swaggo/swag/cmd/swag@v1.16.6 init -g cmd/${APP_NAME}/main.go --parseDependency --parseInternal
 
 # 4. Build - Note the $ sign for the variable
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o /out/app ./cmd/${APP_NAME}
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -tags lambda -ldflags="-s -w" -o /out/app ./cmd/${APP_NAME}
 
 # --- Runtime Stage ---
 FROM gcr.io/distroless/static-debian12:nonroot

@@ -17,4 +17,4 @@ RUN bun run build --filter=frontend...
 
 EXPOSE 3000
 WORKDIR /usr/src/app/apps/frontend
-CMD ["bun", "run", "start"]
+CMD ["bun", "run", "dev"]
