@@ -1,7 +1,7 @@
 name: Deploy Monitoring Service Backend
 on:
   push:
-    branches: [staging]
+    branches: [main]
 
 jobs:
   build:
