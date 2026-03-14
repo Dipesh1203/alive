@@ -6,6 +6,8 @@
     "swagger:init": "swag init -g cmd/server/main.go --parseDependency --parseInternal",
     "build": "go build -o bin/server main.go",
     "dev": "go run cmd/server/main.go",
+    "dev:watch": "go run cmd/monitor/main.go",
+    "dev:all": "go run cmd/server/main.go & go run cmd/monitor/main.go",
     "start": "./bin/server.exe",
     "lint": "go vet ./...",
     "generate": "go run github.com/steebchen/prisma-client-go generate",
