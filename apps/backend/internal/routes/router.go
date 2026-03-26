@@ -47,7 +47,9 @@ func Router(database *db.PrismaClient) *mux.Router {
 	router.HandleFunc("/api/auth/login", handlers.Login(database)).Methods("POST")
 
 	// TODO(frontend): Needed for Notifications screen
-	// router.HandleFunc("/api/notifications/channels", handlers.CreateNotificationChannel(database)).Methods("POST")
+	router.HandleFunc("/api/notifications/channels", handlers.CreateNotificationChannel(database)).Methods("POST")
+	router.HandleFunc("/api/notifications/test", handlers.SendNotification(database)).Methods("POST")
+
 	// router.HandleFunc("/api/notifications/channels", handlers.ListNotificationChannels(database)).Methods("GET")
 	// router.HandleFunc("/api/notifications/channels/{id}", handlers.UpdateNotificationChannel(database)).Methods("PUT")
 	// router.HandleFunc("/api/notifications/channels/{id}", handlers.DeleteNotificationChannel(database)).Methods("DELETE")

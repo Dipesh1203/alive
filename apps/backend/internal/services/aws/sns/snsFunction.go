@@ -100,3 +100,34 @@ func (actor SnsActions) Publish(ctx context.Context, topicArn string, message st
 	}
 	return err
 }
+
+func (actor SnsActions) SubscribeEmail(ctx context.Context, topicArn string, emailAddress string) error {
+	_, err := actor.SnsClient.Subscribe(ctx, &sns.SubscribeInput{
+		Protocol: aws.String("email"),
+		TopicArn: aws.String(topicArn),
+		Endpoint: aws.String(emailAddress),
+	})
+	return err
+}
+
+func (actor SnsActions) Unsubscribe(ctx context.Context, subscriptionArn string) error {
+	_, err := actor.SnsClient.Unsubscribe(ctx, &sns.UnsubscribeInput{
+		SubscriptionArn: aws.String(subscriptionArn),
+	})
+	return err
+}
+func (actor SnsActions) PublishAlert(ctx context.Context, topicArn string, subject string, message string) error {
+	input := &sns.PublishInput{
+		TopicArn: aws.String(topicArn),
+		Subject:  aws.String(subject), // For email, this is the Subject line
+		Message:  aws.String(message),
+	}
+
+	_, err := actor.SnsClient.Publish(ctx, input)
+	if err != nil {
+		log.Printf("Couldn't publish alert to topic %v. Error: %v\n", topicArn, err)
+		return err
+	}
+
+	return nil
+}

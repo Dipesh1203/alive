@@ -1,12 +1,15 @@
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   Activity,
   Bell,
   Globe,
   LayoutDashboard,
+  LogIn,
+  LogOut,
   Settings,
   Users,
   Zap,
@@ -64,6 +67,39 @@ const settingsNavItems = [
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+
+  useEffect(() => {
+    const rawUser = localStorage.getItem('auth_user')
+    if (!rawUser) {
+      setUserEmail(null)
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(rawUser) as { email?: string }
+      setUserEmail(parsed.email ?? null)
+    } catch {
+      setUserEmail(null)
+    }
+  }, [])
+
+  const initials = useMemo(() => {
+    if (!userEmail) return 'AU'
+
+    const localPart = userEmail.split('@')[0] ?? ''
+    const chars = localPart.replace(/[^a-zA-Z0-9]/g, '').slice(0, 2).toUpperCase()
+    return chars || 'AU'
+  }, [userEmail])
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token')
+    localStorage.removeItem('auth_user')
+    setUserEmail(null)
+    router.push('/login')
+    router.refresh()
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -133,13 +169,28 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
               <Avatar className="size-8">
-                <AvatarFallback className="bg-muted text-sm">AJ</AvatarFallback>
+                <AvatarFallback className="bg-muted text-sm">{initials}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-medium">Alex Johnson</span>
-                <span className="text-xs text-muted-foreground">alex..example.com</span>
+                <span className="font-medium">Signed in user</span>
+                <span className="text-xs text-muted-foreground">{userEmail ?? 'No active session'}</span>
               </div>
             </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            {userEmail ? (
+              <SidebarMenuButton size="lg" onClick={handleLogout}>
+                <LogOut className="size-4" />
+                <span>Logout</span>
+              </SidebarMenuButton>
+            ) : (
+              <SidebarMenuButton size="lg" asChild>
+                <Link href="/login">
+                  <LogIn className="size-4" />
+                  <span>Login</span>
+                </Link>
+              </SidebarMenuButton>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

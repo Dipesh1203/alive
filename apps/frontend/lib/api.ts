@@ -42,6 +42,25 @@ interface CreateWebsitePayload {
   url: string
 }
 
+interface ApiAuthUser {
+  id: string
+  email: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+interface ApiAuthResponse {
+  message?: string
+  token?: string
+  error?: string
+  user?: ApiAuthUser
+}
+
+export interface AuthPayload {
+  token: string
+  user: ApiAuthUser
+}
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
@@ -54,10 +73,27 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const errorBody = await response.text()
-    throw new Error(errorBody || `Request failed (${response.status})`)
+
+    try {
+      const parsed = JSON.parse(errorBody) as { error?: string; message?: string }
+      throw new Error(parsed.error || parsed.message || `Request failed (${response.status})`)
+    } catch {
+      throw new Error(errorBody || `Request failed (${response.status})`)
+    }
   }
 
   return response.json() as Promise<T>
+}
+
+function mapAuthPayload(response: ApiAuthResponse): AuthPayload {
+  if (!response.token || !response.user) {
+    throw new Error(response.error || response.message || 'Authentication failed')
+  }
+
+  return {
+    token: response.token,
+    user: response.user,
+  }
 }
 
 function normalizeStatus(status: ApiWebsite['status'] | ApiTick['upStatus']): Website['status'] {
@@ -319,16 +355,20 @@ export async function fetchAllWebsiteDetails(): Promise<WebsiteDetails[]> {
 }
 
 // User Login and Signup
-export async function login(username: string, password: string): Promise<void> {
-  await apiFetch('/api/auth/login', {
+export async function login(email: string, password: string): Promise<AuthPayload> {
+  const response = await apiFetch<ApiAuthResponse>('/api/auth/login', {
     method: 'POST',
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   })
+
+  return mapAuthPayload(response)
 }
 
-export async function signup(username: string, password: string): Promise<void> {
-  await apiFetch('/api/auth/signup', {
+export async function signup(email: string, password: string): Promise<AuthPayload> {
+  const response = await apiFetch<ApiAuthResponse>('/api/auth/signup', {
     method: 'POST',
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   })
+
+  return mapAuthPayload(response)
 }

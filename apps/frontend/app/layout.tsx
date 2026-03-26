@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Cascadia_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { AuthGuard } from '../components/auth-guard'
 import './globals.css'
 
 const cascadiaMono = Cascadia_Mono({
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${cascadiaMono.variable} font-sans antialiased`}>
-        {children}
+        <AuthGuard>{children}</AuthGuard>
         <Analytics />
       </body>
     </html>
