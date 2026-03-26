@@ -20,4 +20,4 @@ EXPOSE 3000
 
 WORKDIR /usr/src/app/apps/frontend
 
-CMD ["bun", "run", "dev"]
+CMD ["bun", "run", "start"]
