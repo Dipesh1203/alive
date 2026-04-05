@@ -1,5 +1,371 @@
 basePath: /
 definitions:
+  db.DevicesModel:
+    properties:
+      createdAt:
+        type: string
+      deviceType:
+        type: string
+      endpointArn:
+        type: string
+      fcmToken:
+        type: string
+      id:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/db.UserModel'
+      userId:
+        type: string
+    type: object
+  db.NotficationStatus:
+    enum:
+    - Sent
+    - Failed
+    - Pending
+    type: string
+    x-enum-varnames:
+    - NotficationStatusSent
+    - NotficationStatusFailed
+    - NotficationStatusPending
+  db.NotificationModel:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      metadata:
+        items:
+          type: integer
+        type: array
+      status:
+        $ref: '#/definitions/db.NotficationStatus'
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/db.UserModel'
+      userId:
+        type: string
+      website:
+        $ref: '#/definitions/db.WebsiteModel'
+      websiteId:
+        type: string
+    type: object
+  db.OrganizationMemberModel:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      organization:
+        $ref: '#/definitions/db.OrganizationModel'
+      organizationId:
+        type: string
+      role:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/db.UserModel'
+      userId:
+        type: string
+    type: object
+  db.OrganizationModel:
+    properties:
+      admin:
+        $ref: '#/definitions/db.UserModel'
+      adminId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      members:
+        items:
+          $ref: '#/definitions/db.OrganizationMemberModel'
+        type: array
+      name:
+        type: string
+      updatedAt:
+        type: string
+      websites:
+        items:
+          $ref: '#/definitions/db.WebsiteModel'
+        type: array
+    type: object
+  db.RegionModel:
+    properties:
+      createdAt:
+        type: string
+      regionId:
+        type: string
+      regionName:
+        type: string
+      ticks:
+        items:
+          $ref: '#/definitions/db.WebsiteTicksModel'
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  db.SubscriptionModel:
+    properties:
+      createdAt:
+        type: string
+      deviceType:
+        type: string
+      id:
+        type: string
+      topicArn:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/db.UserModel'
+      userId:
+        type: string
+    type: object
+  db.UserModel:
+    properties:
+      createdAt:
+        type: string
+      devices:
+        items:
+          $ref: '#/definitions/db.DevicesModel'
+        type: array
+      email:
+        type: string
+      id:
+        type: string
+      notifications:
+        items:
+          $ref: '#/definitions/db.NotificationModel'
+        type: array
+      organizationMemberships:
+        items:
+          $ref: '#/definitions/db.OrganizationMemberModel'
+        type: array
+      organizationsAsAdmin:
+        items:
+          $ref: '#/definitions/db.OrganizationModel'
+        type: array
+      password:
+        type: string
+      subscriptions:
+        items:
+          $ref: '#/definitions/db.SubscriptionModel'
+        type: array
+      updatedAt:
+        type: string
+      userProfile:
+        $ref: '#/definitions/db.UserProfileModel'
+    type: object
+  db.UserProfileModel:
+    properties:
+      avatar:
+        type: string
+      bio:
+        type: string
+      createdAt:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      preferences:
+        items:
+          type: integer
+        type: array
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/db.UserModel'
+      userId:
+        type: string
+    type: object
+  db.WebsiteModel:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      isMonitoringEnabled:
+        type: boolean
+      notifications:
+        items:
+          $ref: '#/definitions/db.NotificationModel'
+        type: array
+      organization:
+        $ref: '#/definitions/db.OrganizationModel'
+      organizationId:
+        type: string
+      status:
+        $ref: '#/definitions/db.WebsiteStatus'
+      ticks:
+        items:
+          $ref: '#/definitions/db.WebsiteTicksModel'
+        type: array
+      updatedAt:
+        type: string
+      url:
+        type: string
+      websiteName:
+        type: string
+    type: object
+  db.WebsiteStatus:
+    enum:
+    - Up
+    - Down
+    - Unknown
+    type: string
+    x-enum-varnames:
+    - WebsiteStatusUp
+    - WebsiteStatusDown
+    - WebsiteStatusUnknown
+  db.WebsiteTicksModel:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      latency:
+        type: integer
+      region:
+        $ref: '#/definitions/db.RegionModel'
+      upStatus:
+        $ref: '#/definitions/db.WebsiteStatus'
+      updatedAt:
+        type: string
+      website:
+        $ref: '#/definitions/db.WebsiteModel'
+      websiteId:
+        type: string
+      websiteRegionId:
+        type: string
+    type: object
+  http.Cookie:
+    properties:
+      domain:
+        description: optional
+        type: string
+      expires:
+        description: optional
+        type: string
+      httpOnly:
+        type: boolean
+      maxAge:
+        description: |-
+          MaxAge=0 means no 'Max-Age' attribute specified.
+          MaxAge<0 means delete cookie now, equivalently 'Max-Age: 0'
+          MaxAge>0 means Max-Age attribute present and given in seconds
+        type: integer
+      name:
+        type: string
+      partitioned:
+        type: boolean
+      path:
+        description: optional
+        type: string
+      quoted:
+        description: indicates whether the Value was originally quoted
+        type: boolean
+      raw:
+        type: string
+      rawExpires:
+        description: for reading cookies only
+        type: string
+      sameSite:
+        $ref: '#/definitions/http.SameSite'
+      secure:
+        type: boolean
+      unparsed:
+        description: Raw text of unparsed attribute-value pairs
+        items:
+          type: string
+        type: array
+      value:
+        type: string
+    type: object
+  http.Header:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+  http.SameSite:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - SameSiteDefaultMode
+    - SameSiteLaxMode
+    - SameSiteStrictMode
+    - SameSiteNoneMode
+  internal_handlers.AddMemberRequest:
+    properties:
+      email:
+        type: string
+      role:
+        type: string
+    type: object
+  internal_handlers.AssignWebsiteRegionsRequest:
+    properties:
+      regionIds:
+        items:
+          type: string
+        type: array
+    type: object
+  internal_handlers.AssignWebsiteRegionsResponse:
+    properties:
+      regionIds:
+        items:
+          type: string
+        type: array
+      websiteId:
+        type: string
+    type: object
+  internal_handlers.AuthResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/db.UserModel'
+    type: object
+  internal_handlers.CreateNotificationChannelRequest:
+    properties:
+      email:
+        type: string
+      fcmToken:
+        type: string
+      type:
+        type: string
+    type: object
+  internal_handlers.CreateNotificationChannelResponse:
+    properties:
+      endpointArn:
+        type: string
+      message:
+        type: string
+    type: object
+  internal_handlers.CreateOrganizationRequest:
+    properties:
+      name:
+        type: string
+    type: object
   internal_handlers.CreateRegionRequest:
     properties:
       regionName:
@@ -7,9 +373,99 @@ definitions:
     type: object
   internal_handlers.CreateWebsiteRequest:
     properties:
+      organizationId:
+        type: string
       url:
         type: string
       websiteName:
+        type: string
+    type: object
+  internal_handlers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  internal_handlers.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_handlers.OrganizationMemberResponse:
+    properties:
+      avatar:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      name:
+        type: string
+      organizationId:
+        type: string
+      role:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  internal_handlers.OrganizationResponse:
+    properties:
+      adminId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_handlers.PreferencesRequest:
+    properties:
+      preferences:
+        additionalProperties: true
+        type: object
+    type: object
+  internal_handlers.SendNotificationRequest:
+    properties:
+      email:
+        type: string
+      endpointArn:
+        type: string
+      message:
+        type: string
+      subject:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  internal_handlers.SignupRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_handlers.UpdateMemberRoleRequest:
+    properties:
+      role:
+        type: string
+    type: object
+  internal_handlers.UpdateOrganizationRequest:
+    properties:
+      name:
         type: string
     type: object
   internal_handlers.UpdateRegionReq:
@@ -24,18 +480,773 @@ definitions:
       websiteName:
         type: string
     type: object
-host: localhost:3000
+  internal_handlers.UserProfileRequest:
+    properties:
+      avatar:
+        type: string
+      bio:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+    type: object
+  internal_handlers.UserProfileResponse:
+    properties:
+      avatar:
+        type: string
+      bio:
+        type: string
+      createdAt:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      preferences:
+        additionalProperties: true
+        type: object
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  internal_handlers.WebsiteInfo:
+    properties:
+      content_length:
+        type: integer
+      cookies:
+        items:
+          $ref: '#/definitions/http.Cookie'
+        type: array
+      headers:
+        $ref: '#/definitions/http.Header'
+      protocol:
+        type: string
+      status:
+        type: string
+      status_code:
+        type: integer
+    type: object
+host: localhost:8000
 info:
   contact: {}
   title: My API Name
   version: "1.0"
 paths:
-  /api/regions:
-    get:
-      description: Fetches all regions
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user with email and password
+      parameters:
+      - description: Login request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.LoginRequest'
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+      summary: Log in a user
+      tags:
+      - auth
+  /api/auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account with email and password
+      parameters:
+      - description: Signup request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.SignupRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.AuthResponse'
+      summary: Sign up a new user
+      tags:
+      - auth
+  /api/health:
+    get:
+      description: Returns server health status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health check
+      tags:
+      - health
+  /api/incidents:
+    get:
+      description: Returns global incident history with optional filters
+      parameters:
+      - description: Filter by website ID
+        in: query
+        name: websiteId
+        type: string
+      - description: Filter by region ID
+        in: query
+        name: regionId
+        type: string
+      - description: down,unknown,degraded,up
+        in: query
+        name: status
+        type: string
+      - description: YYYY-MM-DD
+        in: query
+        name: startDate
+        type: string
+      - description: YYYY-MM-DD
+        in: query
+        name: endDate
+        type: string
+      - description: Offset
+        in: query
+        name: skip
+        type: integer
+      - description: Limit
+        in: query
+        name: take
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List incidents
+      tags:
+      - incidents
+  /api/monitoring/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Enables or disables monitoring for a given website
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/db.WebsiteModel'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Toggle website monitoring
+      tags:
+      - monitoring
+  /api/notifications/channels:
+    post:
+      consumes:
+      - application/json
+      description: Sets up email or push notification channel for the user
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Notification channel request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.CreateNotificationChannelRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handlers.CreateNotificationChannelResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a notification channel
+      tags:
+      - notifications
+  /api/notifications/test:
+    post:
+      consumes:
+      - application/json
+      description: Sends a test notification via email or push
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Send notification request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.SendNotificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Send a test notification
+      tags:
+      - notifications
+  /api/organizations:
+    get:
+      description: Lists all organizations where the user is a member
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handlers.OrganizationResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: List user's organizations
+      tags:
+      - organizations
+    post:
+      consumes:
+      - application/json
+      description: Creates a new organization with the authenticated user as admin
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Organization request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.CreateOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handlers.OrganizationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Create a new organization
+      tags:
+      - organizations
+  /api/organizations/{id}:
+    get:
+      description: Retrieves details of a specific organization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.OrganizationResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Get organization details
+      tags:
+      - organizations
+    put:
+      consumes:
+      - application/json
+      description: Updates organization details (admin only)
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.UpdateOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.OrganizationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Update organization
+      tags:
+      - organizations
+  /api/organizations/{id}/members:
+    get:
+      description: Lists all members of an organization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handlers.OrganizationMemberResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: List organization members
+      tags:
+      - organizations
+    post:
+      consumes:
+      - application/json
+      description: Adds a user to an organization by email (admin only)
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add member request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.AddMemberRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handlers.OrganizationMemberResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Add member to organization
+      tags:
+      - organizations
+  /api/organizations/{id}/members/{memberId}:
+    delete:
+      description: Removes a user from an organization (admin only)
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Member ID / User ID
+        in: path
+        name: memberId
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Remove member from organization
+      tags:
+      - organizations
+  /api/organizations/{id}/members/{memberId}/role:
+    put:
+      consumes:
+      - application/json
+      description: Updates a member's role in an organization (admin only)
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Member ID / User ID
+        in: path
+        name: memberId
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update role request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.UpdateMemberRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.OrganizationMemberResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Update member role
+      tags:
+      - organizations
+  /api/profile:
+    get:
+      description: Retrieves the authenticated user's profile information
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.UserProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Get current user's profile
+      tags:
+      - profile
+    put:
+      consumes:
+      - application/json
+      description: Updates the authenticated user's profile information
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Profile update request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.UserProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.UserProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Update current user's profile
+      tags:
+      - profile
+  /api/profile/preferences:
+    get:
+      description: Retrieves the authenticated user's preferences
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Get user preferences
+      tags:
+      - profile
+    put:
+      consumes:
+      - application/json
+      description: Updates the authenticated user's notification and app preferences
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Preferences request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.PreferencesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.UserProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_handlers.ErrorResponse'
+      summary: Update user preferences
+      tags:
+      - profile
+  /api/regions:
+    get:
+      description: Retrieves all available monitoring regions
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.RegionModel'
+            type: array
         "500":
           description: Internal Server Error
           schema:
@@ -48,8 +1259,13 @@ paths:
     post:
       consumes:
       - application/json
-      description: Takes a region name and saves it to the DB via Prisma
+      description: Creates a new monitoring region
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Create region request
         in: body
         name: body
@@ -59,6 +1275,10 @@ paths:
       produces:
       - application/json
       responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/db.RegionModel'
         "400":
           description: Bad Request
           schema:
@@ -76,8 +1296,13 @@ paths:
       - regions
   /api/regions/{id}:
     delete:
-      description: Deletes a region by id
+      description: Removes a region from the system
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Region ID
         in: path
         name: id
@@ -86,6 +1311,10 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.RegionModel'
         "400":
           description: Bad Request
           schema:
@@ -108,8 +1337,13 @@ paths:
       tags:
       - regions
     get:
-      description: Fetches a region by id
+      description: Retrieves a specific region by ID
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Region ID
         in: path
         name: id
@@ -118,6 +1352,10 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.RegionModel'
         "400":
           description: Bad Request
           schema:
@@ -142,8 +1380,13 @@ paths:
     put:
       consumes:
       - application/json
-      description: Updates region name by id
+      description: Updates a region's name
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Region ID
         in: path
         name: id
@@ -158,6 +1401,10 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.RegionModel'
         "400":
           description: Bad Request
           schema:
@@ -179,12 +1426,49 @@ paths:
       summary: Update a region
       tags:
       - regions
-  /api/websites:
-    get:
-      description: Fetches all websites
+  /api/test:
+    post:
+      description: Internal test endpoint for verifying HTTP connectivity
       produces:
       - application/json
       responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/internal_handlers.WebsiteInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Test endpoint (internal)
+      tags:
+      - internal
+  /api/websites:
+    get:
+      description: Fetches all websites in organizations where user is a member
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.WebsiteModel'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
         "500":
           description: Internal Server Error
           schema:
@@ -197,8 +1481,13 @@ paths:
     post:
       consumes:
       - application/json
-      description: Takes a website name/URL and saves it to the DB via Prisma
+      description: Creates a new website for monitoring in the specified organization
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Create website request
         in: body
         name: body
@@ -208,8 +1497,18 @@ paths:
       produces:
       - application/json
       responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/db.WebsiteModel'
         "400":
           description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
           schema:
             additionalProperties:
               type: string
@@ -223,39 +1522,15 @@ paths:
       summary: Create a new website
       tags:
       - websites
-    put:
-      consumes:
-      - application/json
-      description: Updates website name and/or URL by id
-      parameters:
-      - description: Update website request
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/internal_handlers.UpdateWebsiteReq'
-      produces:
-      - application/json
-      responses:
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Update a website
-      tags:
-      - websites
   /api/websites/{id}:
     delete:
-      description: Deletes a website by id
+      description: Removes a website from the system
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Website ID
         in: path
         name: id
@@ -264,6 +1539,10 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.WebsiteModel'
         "400":
           description: Bad Request
           schema:
@@ -286,8 +1565,13 @@ paths:
       tags:
       - websites
     get:
-      description: Fetches a website by id
+      description: Retrieves a specific website by ID
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Website ID
         in: path
         name: id
@@ -296,6 +1580,10 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.WebsiteModel'
         "400":
           description: Bad Request
           schema:
@@ -315,6 +1603,161 @@ paths:
               type: string
             type: object
       summary: Get a website
+      tags:
+      - websites
+    put:
+      consumes:
+      - application/json
+      description: Updates website name and/or URL
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update website request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.UpdateWebsiteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.WebsiteModel'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a website
+      tags:
+      - websites
+  /api/websites/{id}/details:
+    get:
+      description: Retrieves uptime ticks and latency data for a website within a
+        date range
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Number of records to skip
+        in: query
+        name: skip
+        type: integer
+      - description: Number of records to take
+        in: query
+        name: take
+        type: integer
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: startDate
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: endDate
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.WebsiteTicksModel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get detailed website metrics
+      tags:
+      - websites
+  /api/websites/{id}/regions:
+    put:
+      consumes:
+      - application/json
+      description: Replaces the region assignment used by monitoring workers for the
+        provided website
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Website ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Region IDs to assign
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handlers.AssignWebsiteRegionsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handlers.AssignWebsiteRegionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Assign monitoring regions for a website
       tags:
       - websites
 swagger: "2.0"

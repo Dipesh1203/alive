@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, Globe, Loader2 } from 'lucide-react'
 import { Button } from './ui/button'
 import {
@@ -15,21 +15,54 @@ import {
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Checkbox } from './ui/checkbox'
-import { createWebsite, fetchRegions } from '../lib/api'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select'
+import { createWebsite, fetchRegions, listUserOrganizations } from '../lib/api'
 import type { Region } from '../lib/mock-data'
+import type { Organization } from '../lib/api'
 
 interface AddWebsiteModalProps {
   onCreated?: () => void
+  defaultOrgId?: string
 }
 
-export function AddWebsiteModal({ onCreated }: AddWebsiteModalProps) {
+export function AddWebsiteModal({ onCreated, defaultOrgId }: AddWebsiteModalProps) {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingRegions, setIsLoadingRegions] = useState(false)
+  const [isLoadingOrgs, setIsLoadingOrgs] = useState(false)
   const [regions, setRegions] = useState<Region[]>([])
+  const [organizations, setOrganizations] = useState<Organization[]>([])
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
+  const [organizationId, setOrganizationId] = useState(defaultOrgId || '')
   const [selectedRegions, setSelectedRegions] = useState<string[]>([])
+
+  useEffect(() => {
+    if (open && organizations.length === 0) {
+      loadOrganizations()
+    }
+  }, [open])
+
+  const loadOrganizations = async () => {
+    setIsLoadingOrgs(true)
+    try {
+      const orgs = await listUserOrganizations()
+      setOrganizations(orgs)
+      if (defaultOrgId) {
+        setOrganizationId(defaultOrgId)
+      } else if (orgs.length > 0 && orgs[0]) {
+        setOrganizationId(orgs[0].id)
+      }
+    } finally {
+      setIsLoadingOrgs(false)
+    }
+  }
 
   const loadRegions = async () => {
     setIsLoadingRegions(true)
@@ -47,12 +80,18 @@ export function AddWebsiteModal({ onCreated }: AddWebsiteModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!organizationId) {
+      alert('Please select an organization')
+      return
+    }
+
     setIsLoading(true)
 
     try {
       await createWebsite({
         websiteName: name,
         url,
+        organizationId,
       })
 
       onCreated?.()
@@ -60,6 +99,7 @@ export function AddWebsiteModal({ onCreated }: AddWebsiteModalProps) {
       setOpen(false)
       setName('')
       setUrl('')
+      setOrganizationId(defaultOrgId || (organizations[0]?.id || ''))
       setSelectedRegions(regions[0] ? [regions[0].id] : [])
     } finally {
       setIsLoading(false)
@@ -103,6 +143,27 @@ export function AddWebsiteModal({ onCreated }: AddWebsiteModalProps) {
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="organization">Organization</Label>
+              <Select value={organizationId} onValueChange={setOrganizationId} disabled={isLoadingOrgs}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select an organization" />
+                </SelectTrigger>
+                <SelectContent>
+                  {organizations.map((org) => (
+                    <SelectItem key={org.id} value={org.id}>
+                      {org.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {organizations.length === 0 && !isLoadingOrgs && (
+                <p className="text-xs text-destructive">
+                  No organizations found. Create one first.
+                </p>
+              )}
+            </div>
+
             <div className="grid gap-2">
               <Label htmlFor="name">Display Name</Label>
               <Input
@@ -164,7 +225,7 @@ export function AddWebsiteModal({ onCreated }: AddWebsiteModalProps) {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || !name || !url || selectedRegions.length === 0}>
+            <Button type="submit" disabled={isLoading || isLoadingOrgs || !name || !url || !organizationId || selectedRegions.length === 0}>
               {isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
               {isLoading ? 'Adding...' : 'Add Website'}
             </Button>

@@ -16,6 +16,14 @@ type WebsiteInfo struct {
 	Cookies    []*http.Cookie `json:"cookies"`
 }
 
+// GetTest godoc
+// @Summary      Test endpoint (internal)
+// @Description  Internal test endpoint for verifying HTTP connectivity
+// @Tags         internal
+// @Produce      json
+// @Success      202  {object}  WebsiteInfo
+// @Failure      500  {object}  map[string]string
+// @Router       /api/test [post]
 func GetTest(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Request", r)

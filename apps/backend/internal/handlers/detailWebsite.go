@@ -12,16 +12,22 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// GetWebsite godoc
-// @Summary      Get a website
-// @Description  Fetches a website by id
+// GetDetailsWebsite godoc
+// @Summary      Get detailed website metrics
+// @Description  Retrieves uptime ticks and latency data for a website within a date range
 // @Tags         websites
 // @Produce      json
-// @Param        id   path      string  true  "Website ID"
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
-// @Router       /api/websites/{id} [get]
+// @Param        Authorization  header   string  true  "Bearer token"
+// @Param        id             path     string  true  "Website ID"
+// @Param        skip           query    integer false "Number of records to skip"
+// @Param        take           query    integer false "Number of records to take"
+// @Param        startDate      query    string  false "Start date (YYYY-MM-DD)"
+// @Param        endDate        query    string  false "End date (YYYY-MM-DD)"
+// @Success      200            {array}  db.WebsiteTicksModel
+// @Failure      400            {object} map[string]string
+// @Failure      404            {object} map[string]string
+// @Failure      500            {object} map[string]string
+// @Router       /api/websites/{id}/details [get]
 func GetDetailsWebsite(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
@@ -49,7 +55,7 @@ func GetDetailsWebsite(database *db.PrismaClient) http.HandlerFunc {
 		startDate := query.Get("startDate")
 		endDate := query.Get("endDate")
 
-		_, err := services.GetWebsite(ctx, database, id)
+		_, err := services.GetWebsite(ctx, database, id, r.Context().Value("userID").(string))
 		if err != nil {
 			if db.IsErrNotFound(err) {
 				http.Error(w, "Website not found", http.StatusNotFound)

@@ -1,6 +1,7 @@
 'use client'
 
-import { Settings, User, Key, Globe, Clock, Trash2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Settings, User, Key, Globe, Clock, Trash2, Bell } from 'lucide-react'
 import { DashboardLayout } from '../../components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
@@ -8,6 +9,7 @@ import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { Switch } from '../../components/ui/switch'
 import { Separator } from '../../components/ui/separator'
+import { useToast } from '../../hooks/use-toast'
 import {
   Select,
   SelectContent,
@@ -15,8 +17,82 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../components/ui/select'
+import { getMyProfile, updateMyProfile, getMyPreferences, updateMyPreferences } from '../../lib/api'
+
+type Preferences = {
+  emailNotifications: boolean
+  pushNotifications: boolean
+  downtimeAlerts: boolean
+  degradationAlerts: boolean
+  recoveryNotifications: boolean
+  dailyDigest: boolean
+}
+
+const defaultPreferences: Preferences = {
+  emailNotifications: true,
+  pushNotifications: true,
+  downtimeAlerts: true,
+  degradationAlerts: true,
+  recoveryNotifications: true,
+  dailyDigest: false,
+}
 
 export default function SettingsPage() {
+  const { toast } = useToast()
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', phone: '', bio: '' })
+  const [preferences, setPreferences] = useState<Preferences>(defaultPreferences)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const profile = await getMyProfile()
+        setFormData({ firstName: profile.firstName || '', lastName: profile.lastName || '', phone: profile.phone || '', bio: profile.bio || '' })
+        const prefs = await getMyPreferences() as Record<string, unknown>
+        setPreferences({
+          emailNotifications: typeof prefs.emailNotifications === 'boolean' ? prefs.emailNotifications : defaultPreferences.emailNotifications,
+          pushNotifications: typeof prefs.pushNotifications === 'boolean' ? prefs.pushNotifications : defaultPreferences.pushNotifications,
+          downtimeAlerts: typeof prefs.downtimeAlerts === 'boolean' ? prefs.downtimeAlerts : defaultPreferences.downtimeAlerts,
+          degradationAlerts: typeof prefs.degradationAlerts === 'boolean' ? prefs.degradationAlerts : defaultPreferences.degradationAlerts,
+          recoveryNotifications: typeof prefs.recoveryNotifications === 'boolean' ? prefs.recoveryNotifications : defaultPreferences.recoveryNotifications,
+          dailyDigest: typeof prefs.dailyDigest === 'boolean' ? prefs.dailyDigest : defaultPreferences.dailyDigest,
+        })
+      } catch (error) {
+        toast({ title: 'Error', description: 'Failed to load profile settings', variant: 'destructive' })
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadProfile()
+  }, [])
+
+  const handleSaveProfile = async () => {
+    setSaving(true)
+    try {
+      await updateMyProfile(formData.firstName, formData.lastName, formData.phone, formData.bio)
+      toast({ title: 'Success', description: 'Profile updated successfully' })
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to save profile', variant: 'destructive' })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleSavePreferences = async () => {
+    setSaving(true)
+    try {
+      await updateMyPreferences(preferences)
+      toast({ title: 'Success', description: 'Notification preferences updated' })
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to save preferences', variant: 'destructive' })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) return (<DashboardLayout title="Settings"><div className="space-y-6 max-w-3xl"><div>Loading settings...</div></div></DashboardLayout>)
+
   return (
     <DashboardLayout title="Settings">
       <div className="space-y-6 max-w-3xl">
@@ -40,19 +116,85 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">Display Name</Label>
-              <Input id="name" defaultValue="Alex Johnson" />
+              <Label htmlFor="firstName">First Name</Label>
+              <Input id="firstName" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} placeholder="Enter your first name" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input id="email" type="email" defaultValue="alex@example.com" />
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input id="lastName" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} placeholder="Enter your last name" />
             </div>
-            <Button>Save Changes</Button>
+            <div className="grid gap-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input id="phone" type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="Enter your phone number" />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="bio">Bio</Label>
+              <Input id="bio" value={formData.bio} onChange={(e) => setFormData({ ...formData, bio: e.target.value })} placeholder="Tell us about yourself" />
+            </div>
+            <Button onClick={handleSaveProfile} disabled={saving}>{saving ? 'Saving...' : 'Save Profile'}</Button>
+          </CardContent>
+        </Card>
+
+        {/* Notification Preferences */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="size-5" />
+              Notification Preferences
+            </CardTitle>
+            <CardDescription>
+              Manage how you receive alerts and updates
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
+              <div>
+                <div className="font-medium">Email Notifications</div>
+                <div className="text-sm text-muted-foreground">Receive alerts via email</div>
+              </div>
+              <Switch checked={preferences.emailNotifications} onCheckedChange={(checked) => setPreferences({ ...preferences, emailNotifications: checked })} />
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
+              <div>
+                <div className="font-medium">Push Notifications</div>
+                <div className="text-sm text-muted-foreground">Receive browser push notifications</div>
+              </div>
+              <Switch checked={preferences.pushNotifications} onCheckedChange={(checked) => setPreferences({ ...preferences, pushNotifications: checked })} />
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
+              <div>
+                <div className="font-medium">Downtime Alerts</div>
+                <div className="text-sm text-muted-foreground">Alert when a website goes down</div>
+              </div>
+              <Switch checked={preferences.downtimeAlerts} onCheckedChange={(checked) => setPreferences({ ...preferences, downtimeAlerts: checked })} />
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
+              <div>
+                <div className="font-medium">Degradation Alerts</div>
+                <div className="text-sm text-muted-foreground">Alert when response times are slow</div>
+              </div>
+              <Switch checked={preferences.degradationAlerts} onCheckedChange={(checked) => setPreferences({ ...preferences, degradationAlerts: checked })} />
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
+              <div>
+                <div className="font-medium">Recovery Notifications</div>
+                <div className="text-sm text-muted-foreground">Alert when a website comes back online</div>
+              </div>
+              <Switch checked={preferences.recoveryNotifications} onCheckedChange={(checked) => setPreferences({ ...preferences, recoveryNotifications: checked })} />
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
+              <div>
+                <div className="font-medium">Daily Digest</div>
+                <div className="text-sm text-muted-foreground">Receive daily summary of monitoring activity</div>
+              </div>
+              <Switch checked={preferences.dailyDigest} onCheckedChange={(checked) => setPreferences({ ...preferences, dailyDigest: checked })} />
+            </div>
+            <Button onClick={handleSavePreferences} disabled={saving}>{saving ? 'Saving...' : 'Save Preferences'}</Button>
           </CardContent>
         </Card>
 
         {/* Workspace settings */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Globe className="size-5" />
@@ -87,10 +229,10 @@ export default function SettingsPage() {
             </div>
             <Button>Save Changes</Button>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Monitoring defaults */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="size-5" />
@@ -148,10 +290,10 @@ export default function SettingsPage() {
             </div>
             <Button>Save Changes</Button>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* API settings */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Key className="size-5" />
@@ -181,10 +323,10 @@ export default function SettingsPage() {
               Generate New API Key
             </Button>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Danger zone */}
-        <Card className="border-destructive/50">
+        {/* <Card className="border-destructive/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <Trash2 className="size-5" />
@@ -207,7 +349,7 @@ export default function SettingsPage() {
               </Button>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </DashboardLayout>
   )

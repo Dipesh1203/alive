@@ -5,7 +5,6 @@ import (
 	_ "backend/docs"
 	router "backend/internal/routes"
 	"backend/internal/utils"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -14,24 +13,32 @@ import (
 
 // @title My API Name
 // @version 1.0
-// @host localhost:3000
+// @host localhost:8000
 // @BasePath /
 func main() {
+	log.Printf("[MAIN] Starting backend server initialization...")
+
 	//load env
 	if err := godotenv.Load(); err != nil {
-		log.Println("Warning: No .env file found")
+		log.Printf("[MAIN] Warning: No .env file found - using system environment variables")
+	} else {
+		log.Printf("[MAIN] Successfully loaded .env file")
 	}
 
 	// Database Setup
+	log.Printf("[MAIN] Initializing database connection...")
 	client := db.NewClient()
 	if err := client.Prisma.Connect(); err != nil {
-		log.Fatal("Failed to connect to DB:", err)
+		log.Fatalf("[MAIN] FATAL: Failed to connect to database - %v", err)
 	}
+	log.Printf("[MAIN] Database connection established successfully")
 
 	defer func() {
+		log.Printf("[MAIN] Closing database connection...")
 		if err := client.Prisma.Disconnect(); err != nil {
-			log.Printf("Error disconnecting: %v", err)
+			log.Printf("[MAIN] Error disconnecting from database: %v", err)
 		}
+		log.Printf("[MAIN] Database connection closed")
 	}()
 
 	// RabbitMQ
@@ -39,9 +46,16 @@ func main() {
 	// ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	// defer stop()
 	// go services.StartMonitoring(ctx, client)
-	fmt.Println("Backend Running on :8000")
+	log.Printf("[MAIN] Setting up router...")
 	r := router.Router(client)
 	handler := utils.CorsMiddleware(r)
+	log.Printf("[MAIN] Router setup complete")
 
-	log.Fatal(http.ListenAndServe(":8000", handler))
+	log.Printf("[MAIN] ========================================")
+	log.Printf("[MAIN] Backend server running on :8000")
+	log.Printf("[MAIN] ========================================")
+
+	if err := http.ListenAndServe(":8000", handler); err != nil {
+		log.Fatalf("[MAIN] FATAL: Server error - %v", err)
+	}
 }

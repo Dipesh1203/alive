@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "swagger:init": "swag init -g cmd/server/main.go --parseDependency --parseInternal",
-    "build": "go build -o bin/server cmd/server/main.go",
+    "build": "go build -o bin/server.exe cmd/server/main.go",
     "dev": "go run cmd/server/main.go",
     "dev:watch": "go run cmd/monitor/main.go",
     "dev:all": "go run cmd/server/main.go & go run cmd/monitor/main.go",
@@ -13,5 +13,7 @@
     "generate": "go run github.com/steebchen/prisma-client-go generate",
     "migrate": "go run github.com/steebchen/prisma-client-go migrate dev"
   },
-  "dependencies": {}
+  "dependencies": {
+    "gsap": "^3.14.2"
+  }
 }

@@ -56,7 +56,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             localStorage.setItem('auth_token', payload.token)
             localStorage.setItem('auth_user', JSON.stringify(payload.user))
 
-            router.push('/')
+            router.push('/dashboard')
             router.refresh()
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Authentication failed')

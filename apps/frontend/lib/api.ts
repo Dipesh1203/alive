@@ -40,6 +40,7 @@ interface ApiTick {
 interface CreateWebsitePayload {
   websiteName: string
   url: string
+  organizationId: string
 }
 
 interface ApiAuthUser {
@@ -61,11 +62,22 @@ export interface AuthPayload {
   user: ApiAuthUser
 }
 
+function getAuthToken(): string | null {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  return localStorage.getItem('auth_token')
+}
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  const authToken = getAuthToken()
+
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
       ...(init?.headers ?? {}),
     },
     cache: 'no-store',
@@ -371,4 +383,189 @@ export async function signup(email: string, password: string): Promise<AuthPaylo
   })
 
   return mapAuthPayload(response)
+}
+
+// Organization Management
+export interface Organization {
+  id: string
+  name: string
+  adminId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface OrganizationMember {
+  id: string
+  userId: string
+  organizationId: string
+  role: 'admin' | 'viewer'
+  email?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface UserProfile {
+  id: string
+  userId: string
+  firstName: string
+  lastName: string
+  phone: string
+  bio: string
+  avatar: string
+  preferences?: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface LandingStat {
+  label: string
+  value: string
+  hint: string
+}
+
+export interface LandingFeature {
+  title: string
+  description: string
+}
+
+export interface LandingTestimonial {
+  name: string
+  role: string
+  company: string
+  quote: string
+  rating: number
+  location: string
+}
+
+export interface LandingPricingPlan {
+  name: string
+  description: string
+  price: number
+  currency: string
+  interval: 'monthly' | 'yearly'
+  popular: boolean
+  cta: string
+  features: string[]
+}
+
+export interface LandingFAQ {
+  question: string
+  answer: string
+}
+
+export interface LandingOverview {
+  stats: LandingStat[]
+  features: LandingFeature[]
+  testimonials: LandingTestimonial[]
+  pricing: LandingPricingPlan[]
+  faqs: LandingFAQ[]
+}
+
+export async function createOrganization(name: string): Promise<Organization> {
+  return apiFetch<Organization>('/api/organizations', {
+    method: 'POST',
+    body: JSON.stringify({ name }),
+  })
+}
+
+export async function listUserOrganizations(): Promise<Organization[]> {
+  return apiFetch<Organization[]>('/api/organizations', {
+    method: 'GET',
+  })
+}
+
+export async function getOrganization(orgId: string): Promise<Organization> {
+  return apiFetch<Organization>(`/api/organizations/${orgId}`, {
+    method: 'GET',
+  })
+}
+
+export async function updateOrganization(orgId: string, name: string): Promise<Organization> {
+  return apiFetch<Organization>(`/api/organizations/${orgId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ name }),
+  })
+}
+
+export async function listOrganizationMembers(orgId: string): Promise<OrganizationMember[]> {
+  return apiFetch<OrganizationMember[]>(`/api/organizations/${orgId}/members`, {
+    method: 'GET',
+  })
+}
+
+export async function addOrganizationMember(orgId: string, email: string, role: 'admin' | 'viewer' = 'viewer'): Promise<OrganizationMember> {
+  return apiFetch<OrganizationMember>(`/api/organizations/${orgId}/members`, {
+    method: 'POST',
+    body: JSON.stringify({ email, role }),
+  })
+}
+
+export async function updateMemberRole(orgId: string, memberId: string, role: 'admin' | 'viewer'): Promise<OrganizationMember> {
+  return apiFetch<OrganizationMember>(`/api/organizations/${orgId}/members/${memberId}/role`, {
+    method: 'PUT',
+    body: JSON.stringify({ role }),
+  })
+}
+
+export async function removeOrganizationMember(orgId: string, memberId: string): Promise<{ message: string }> {
+  return apiFetch<{ message: string }>(`/api/organizations/${orgId}/members/${memberId}`, {
+    method: 'DELETE',
+  })
+}
+
+// User Profile Management
+export async function getMyProfile(): Promise<UserProfile> {
+  return apiFetch<UserProfile>('/api/profile', {
+    method: 'GET',
+  })
+}
+
+export async function updateMyProfile(
+  firstName: string,
+  lastName: string,
+  phone: string,
+  bio: string,
+  avatar?: string,
+): Promise<UserProfile> {
+  return apiFetch<UserProfile>('/api/profile', {
+    method: 'PUT',
+    body: JSON.stringify({ firstName, lastName, phone, bio, avatar }),
+  })
+}
+
+export async function getMyPreferences(): Promise<Record<string, unknown>> {
+  return apiFetch<Record<string, unknown>>('/api/profile/preferences', {
+    method: 'GET',
+  })
+}
+
+export async function updateMyPreferences(preferences: Record<string, unknown>): Promise<UserProfile> {
+  return apiFetch<UserProfile>('/api/profile/preferences', {
+    method: 'PUT',
+    body: JSON.stringify({ preferences }),
+  })
+}
+
+export async function fetchLandingOverview(billing: 'monthly' | 'yearly' = 'monthly'): Promise<LandingOverview> {
+  return apiFetch<LandingOverview>(`/api/public/landing?billing=${billing}`, {
+    method: 'GET',
+  })
+}
+
+export async function fetchLandingTestimonials(): Promise<LandingTestimonial[]> {
+  return apiFetch<LandingTestimonial[]>('/api/public/landing/testimonials', {
+    method: 'GET',
+  })
+}
+
+export async function fetchLandingPricing(billing: 'monthly' | 'yearly' = 'monthly'): Promise<LandingPricingPlan[]> {
+  return apiFetch<LandingPricingPlan[]>(`/api/public/landing/pricing?billing=${billing}`, {
+    method: 'GET',
+  })
+}
+
+export async function fetchLandingFaqs(): Promise<LandingFAQ[]> {
+  return apiFetch<LandingFAQ[]>('/api/public/landing/faqs', {
+    method: 'GET',
+  })
 }

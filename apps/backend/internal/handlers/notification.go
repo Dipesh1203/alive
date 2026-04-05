@@ -31,6 +31,18 @@ type SendNotificationRequest struct {
 	Title       string `json:"title,omitempty"`
 }
 
+// CreateNotificationChannel godoc
+// @Summary      Create a notification channel
+// @Description  Sets up email or push notification channel for the user
+// @Tags         notifications
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header   string                              true  "Bearer token"
+// @Param        body           body     CreateNotificationChannelRequest   true  "Notification channel request"
+// @Success      201            {object} CreateNotificationChannelResponse
+// @Failure      400            {object} map[string]string
+// @Failure      500            {object} map[string]string
+// @Router       /api/notifications/channels [post]
 func CreateNotificationChannel(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = database
@@ -88,6 +100,18 @@ func CreateNotificationChannel(database *db.PrismaClient) http.HandlerFunc {
 	}
 }
 
+// SendNotification godoc
+// @Summary      Send a test notification
+// @Description  Sends a test notification via email or push
+// @Tags         notifications
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header   string                   true  "Bearer token"
+// @Param        body           body     SendNotificationRequest  true  "Send notification request"
+// @Success      200            {object} map[string]string
+// @Failure      400            {object} map[string]string
+// @Failure      500            {object} map[string]string
+// @Router       /api/notifications/test [post]
 func SendNotification(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = database

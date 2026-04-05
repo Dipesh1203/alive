@@ -8,49 +8,91 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model website{
+model organization {
+  id String @id @default(uuid())
+  name String
+  adminId String
+  admin user @relation("adminOf", fields: [adminId], references: [id])
+  members organizationMember[]
+  websites website[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model organizationMember {
+  id String @id @default(uuid())
+  userId String
+  user user @relation("memberOf", fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role String @default("viewer") // admin or viewer
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, organizationId])
+}
+
+model userProfile {
+  id String @id @default(uuid())
+  userId String @unique
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName String?
+  lastName String?
+  phone String?
+  bio String?
+  avatar String?
+  preferences Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model website {
   id String @id @default(uuid())
   websiteName String
   url String
   status websiteStatus @default(Unknown)
+  organizationId String
+  organization organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   ticks websiteTicks[]  
   notifications notification[]
   isMonitoringEnabled Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-   
 }
 
-model region{
+model region {
   regionId String @id @default(uuid())
   regionName String 
-  ticks      websiteTicks[]
+  ticks websiteTicks[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum websiteStatus{
+enum websiteStatus {
   Up
   Down
   Unknown
 }
 
-model websiteTicks{
+model websiteTicks {
   id Int @id @default(autoincrement())
   websiteId String
-  website website @relation(fields: [websiteId],references: [id])
+  website website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   upStatus websiteStatus @default(Unknown)
   latency Int?
   websiteRegionId String
-  region region @relation(fields:[websiteRegionId],references:[regionId])
+  region region @relation(fields: [websiteRegionId], references: [regionId])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model user{
+model user {
   id String @id @default(uuid())
   email String @unique
   password String
+  organizationsAsAdmin organization[] @relation("adminOf")
+  organizationMemberships organizationMember[] @relation("memberOf")
+  userProfile userProfile?
   devices devices[]
   notifications notification[]
   subscriptions subscription[]

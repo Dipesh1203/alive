@@ -7,10 +7,21 @@ interface AuthGuardProps {
     children: React.ReactNode
 }
 
-const PUBLIC_ROUTES = ['/login', '/signup']
+const PUBLIC_ROUTES = ['/', '/login', '/signup']
+const AUTH_ROUTES = ['/login', '/signup']
 
 function isPublicRoute(pathname: string): boolean {
-    return PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`))
+    if (pathname === '/') {
+        return true
+    }
+
+    return PUBLIC_ROUTES
+        .filter((route) => route !== '/')
+        .some((route) => pathname === route || pathname.startsWith(`${route}/`))
+}
+
+function isAuthRoute(pathname: string): boolean {
+    return AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`))
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
@@ -28,9 +39,9 @@ export function AuthGuard({ children }: AuthGuardProps) {
             return
         }
 
-        if (token && onPublicRoute) {
+        if (token && isAuthRoute(pathname)) {
             setCanRender(false)
-            router.replace('/')
+            router.replace('/dashboard')
             return
         }
 

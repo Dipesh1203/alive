@@ -44,11 +44,13 @@ type IncidentResponse struct {
 // @Tags         websites
 // @Accept       json
 // @Produce      json
-// @Param        id    path      string                       true  "Website ID"
-// @Param        body  body      AssignWebsiteRegionsRequest  true  "Region IDs"
-// @Failure      400   {object}  map[string]string
-// @Failure      404   {object}  map[string]string
-// @Failure      500   {object}  map[string]string
+// @Param        Authorization  header   string                       true  "Bearer token"
+// @Param        id             path     string                       true  "Website ID"
+// @Param        body           body     AssignWebsiteRegionsRequest  true  "Region IDs to assign"
+// @Success      200            {object} AssignWebsiteRegionsResponse
+// @Failure      400            {object} map[string]string
+// @Failure      404            {object} map[string]string
+// @Failure      500            {object} map[string]string
 // @Router       /api/websites/{id}/regions [put]
 func AssignWebsiteRegions(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -73,7 +75,7 @@ func AssignWebsiteRegions(database *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
-		_, err := services.GetWebsite(ctx, database, websiteID)
+		_, err := services.GetWebsite(ctx, database, websiteID, r.Context().Value("userID").(string))
 		if err != nil {
 			if db.IsErrNotFound(err) {
 				http.Error(w, "Website not found", http.StatusNotFound)

@@ -6,6 +6,7 @@ import (
 	"backend/internal/utils"
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -22,71 +23,87 @@ type UpdateRegionReq struct {
 
 // CreateRegion godoc
 // @Summary      Create a new region
-// @Description  Takes a region name and saves it to the DB via Prisma
+// @Description  Creates a new monitoring region
 // @Tags         regions
 // @Accept       json
 // @Produce      json
-// @Param        body  body      CreateRegionRequest  true  "Create region request"
-// @Failure      400   {object}  map[string]string
-// @Failure      500   {object}  map[string]string
+// @Param        Authorization  header   string                 true  "Bearer token"
+// @Param        body           body     CreateRegionRequest    true  "Create region request"
+// @Success      201            {object} db.RegionModel
+// @Failure      400            {object} map[string]string
+// @Failure      500            {object} map[string]string
 // @Router       /api/regions [post]
 func CreateRegion(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("[REGION] New CreateRegion request received")
 		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 		defer cancel()
 
 		var req CreateRegionRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			log.Printf("[REGION] ERROR: Failed to decode request body - %v", err)
 			http.Error(w, "Invalid request body", http.StatusBadRequest)
 			return
 		}
 
 		if req.RegionName == "" {
+			log.Printf("[REGION] ERROR: Region name is empty")
 			http.Error(w, "regionName is required", http.StatusBadRequest)
 			return
 		}
 
+		log.Printf("[REGION] Creating region: %s", req.RegionName)
 		region, err := services.CreateRegion(ctx, database, req.RegionName)
 		if err != nil {
+			log.Printf("[REGION] ERROR: Failed to create region - %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
+		log.Printf("[REGION] Region created successfully with ID: %s", region.RegionID)
 		utils.WriteJSON(w, http.StatusCreated, region)
 	}
 }
 
 // ListRegions godoc
 // @Summary      List regions
-// @Description  Fetches all regions
+// @Description  Retrieves all available monitoring regions
 // @Tags         regions
 // @Produce      json
-// @Failure      500   {object}  map[string]string
+// @Param        Authorization  header   string  true  "Bearer token"
+// @Success      200            {array}  db.RegionModel
+// @Failure      500            {object} map[string]string
 // @Router       /api/regions [get]
 func ListRegions(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("[REGION] New ListRegions request received")
 		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 		defer cancel()
 
+		log.Printf("[REGION] Fetching all regions")
 		regions, err := services.ListRegions(ctx, database)
 		if err != nil {
+			log.Printf("[REGION] ERROR: Failed to list regions - %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
+		log.Printf("[REGION] Retrieved %d regions", len(regions))
 		utils.WriteJSON(w, http.StatusOK, regions)
 	}
 }
 
 // GetRegion godoc
 // @Summary      Get a region
-// @Description  Fetches a region by id
+// @Description  Retrieves a specific region by ID
 // @Tags         regions
 // @Produce      json
-// @Param        id   path      string  true  "Region ID"
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Param        Authorization  header   string  true  "Bearer token"
+// @Param        id             path     string  true  "Region ID"
+// @Success      200            {object} db.RegionModel
+// @Failure      400            {object} map[string]string
+// @Failure      404            {object} map[string]string
+// @Failure      500            {object} map[string]string
 // @Router       /api/regions/{id} [get]
 func GetRegion(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -115,15 +132,17 @@ func GetRegion(database *db.PrismaClient) http.HandlerFunc {
 
 // UpdateRegion godoc
 // @Summary      Update a region
-// @Description  Updates region name by id
+// @Description  Updates a region's name
 // @Tags         regions
 // @Accept       json
 // @Produce      json
-// @Param        id    path      string            true  "Region ID"
-// @Param        body  body      UpdateRegionReq   true  "Update region request"
-// @Failure      400   {object}  map[string]string
-// @Failure      404   {object}  map[string]string
-// @Failure      500   {object}  map[string]string
+// @Param        Authorization  header   string           true  "Bearer token"
+// @Param        id             path     string           true  "Region ID"
+// @Param        body           body     UpdateRegionReq  true  "Update region request"
+// @Success      200            {object} db.RegionModel
+// @Failure      400            {object} map[string]string
+// @Failure      404            {object} map[string]string
+// @Failure      500            {object} map[string]string
 // @Router       /api/regions/{id} [put]
 func UpdateRegion(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -168,13 +187,15 @@ func UpdateRegion(database *db.PrismaClient) http.HandlerFunc {
 
 // DeleteRegion godoc
 // @Summary      Delete a region
-// @Description  Deletes a region by id
+// @Description  Removes a region from the system
 // @Tags         regions
 // @Produce      json
-// @Param        id   path      string  true  "Region ID"
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Param        Authorization  header   string  true  "Bearer token"
+// @Param        id             path     string  true  "Region ID"
+// @Success      200            {object} db.RegionModel
+// @Failure      400            {object} map[string]string
+// @Failure      404            {object} map[string]string
+// @Failure      500            {object} map[string]string
 // @Router       /api/regions/{id} [delete]
 func DeleteRegion(database *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

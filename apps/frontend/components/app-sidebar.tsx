@@ -32,7 +32,7 @@ import { Avatar, AvatarFallback } from './ui/avatar'
 const mainNavItems = [
   {
     title: 'Dashboard',
-    href: '/',
+    href: '/dashboard',
     icon: LayoutDashboard,
   },
   {
@@ -53,10 +53,15 @@ const settingsNavItems = [
     href: '/notifications',
     icon: Bell,
   },
+  // {
+  //   title: 'Team',
+  //   href: '/team',
+  //   icon: Users,
+  // },
   {
-    title: 'Team',
-    href: '/team',
-    icon: Users,
+    title: 'Organization',
+    href: '/organizations',
+    icon: Globe,
   },
   {
     title: 'Settings',
@@ -107,7 +112,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
+              <Link href="/dashboard">
                 <div className="flex size-8 items-center justify-center rounded-lg bg-uptime text-uptime-foreground">
                   <Activity className="size-4" />
                 </div>

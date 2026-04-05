@@ -29,7 +29,7 @@ export function DashboardLayout({ children, breadcrumbs, title }: DashboardLayou
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Alive</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard">Alive</BreadcrumbLink>
               </BreadcrumbItem>
               {breadcrumbs?.map((crumb, index) => (
                 <span key={crumb.label} className="contents">

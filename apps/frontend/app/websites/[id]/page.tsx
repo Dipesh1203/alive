@@ -103,7 +103,7 @@ export default function WebsiteDetailPage({ params }: WebsiteDetailPageProps) {
   return (
     <DashboardLayout
       breadcrumbs={[
-        { label: 'Websites', href: '/' },
+        { label: 'Websites', href: '/websites' },
         { label: website.name },
       ]}
     >
@@ -112,7 +112,7 @@ export default function WebsiteDetailPage({ params }: WebsiteDetailPageProps) {
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4">
             <Button variant="ghost" size="icon" asChild>
-              <Link href="/">
+              <Link href="/websites">
                 <ArrowLeft className="size-4" />
                 <span className="sr-only">Back to dashboard</span>
               </Link>

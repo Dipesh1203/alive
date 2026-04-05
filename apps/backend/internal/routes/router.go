@@ -3,76 +3,99 @@ package router
 import (
 	"backend/db"
 	"backend/internal/handlers"
+	"backend/internal/middleware"
+	"log"
 
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func Router(database *db.PrismaClient) *mux.Router {
+	log.Printf("[ROUTER] Initializing router...")
 	router := mux.NewRouter()
 
+	log.Printf("[ROUTER] Registering swagger endpoint...")
 	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+
 	// Health check endpoint
+	log.Printf("[ROUTER] Registering health check endpoint: GET /api/health")
 	router.HandleFunc("/api/health", handlers.HealthCheck).Methods("GET")
 
-	// Auth endpoints
+	// Auth endpoints (no auth required)
+	log.Printf("[ROUTER] Registering auth endpoints...")
 	router.HandleFunc("/api/auth/signup", handlers.Signup(database)).Methods("POST")
+	log.Printf("[ROUTER] Registered: POST /api/auth/signup")
 	router.HandleFunc("/api/auth/login", handlers.Login(database)).Methods("POST")
+	log.Printf("[ROUTER] Registered: POST /api/auth/login")
 
-	// Website endpoints
-	router.HandleFunc("/api/websites", handlers.CreateWebsite(database)).Methods("POST")
-	router.HandleFunc("/api/websites", handlers.ListWebsites(database)).Methods("GET")
-	router.HandleFunc("/api/websites/{id}", handlers.GetWebsite(database)).Methods("GET")
-	router.HandleFunc("/api/websites/{id}", handlers.UpdateWebsite(database)).Methods("PUT")
-	router.HandleFunc("/api/websites/{id}", handlers.DeleteWebsite(database)).Methods("DELETE")
+	// Public landing endpoints (no auth required)
+	log.Printf("[ROUTER] Registering public landing endpoints...")
+	router.HandleFunc("/api/public/landing", handlers.GetLandingOverview(database)).Methods("GET")
+	router.HandleFunc("/api/public/landing/testimonials", handlers.ListLandingTestimonials(database)).Methods("GET")
+	router.HandleFunc("/api/public/landing/pricing", handlers.ListLandingPricing(database)).Methods("GET")
+	router.HandleFunc("/api/public/landing/faqs", handlers.ListLandingFAQs(database)).Methods("GET")
 
-	// Monitoring endpoint
-	router.HandleFunc("/api/monitoring/{id}", handlers.ToggleMonitoring(database)).Methods("POST")
+	// Protected routes - apply auth middleware
+	log.Printf("[ROUTER] Initializing protected routes with auth middleware...")
+	protectedRouter := router.PathPrefix("/api").Subrouter()
+	protectedRouter.Use(middleware.AuthMiddleware)
 
-	// Region endpoints
-	router.HandleFunc("/api/regions", handlers.CreateRegion(database)).Methods("POST")
-	router.HandleFunc("/api/regions", handlers.ListRegions(database)).Methods("GET")
-	router.HandleFunc("/api/regions/{id}", handlers.GetRegion(database)).Methods("GET")
-	router.HandleFunc("/api/regions/{id}", handlers.UpdateRegion(database)).Methods("PUT")
-	router.HandleFunc("/api/regions/{id}", handlers.DeleteRegion(database)).Methods("DELETE")
+	// Profile endpoints (protected)
+	log.Printf("[ROUTER] Registering profile endpoints...")
+	protectedRouter.HandleFunc("/profile", handlers.GetMyProfile(database)).Methods("GET")
+	protectedRouter.HandleFunc("/profile", handlers.UpdateMyProfile(database)).Methods("PUT")
+	protectedRouter.HandleFunc("/profile/preferences", handlers.GetMyPreferences(database)).Methods("GET")
+	protectedRouter.HandleFunc("/profile/preferences", handlers.UpdateMyPreferences(database)).Methods("PUT")
 
-	//Detailed Information about a website endpoints
-	router.HandleFunc("/api/websites/{id}/details", handlers.GetDetailsWebsite(database)).Methods("GET")
+	// Organization endpoints (protected)
+	log.Printf("[ROUTER] Registering organization endpoints...")
+	protectedRouter.HandleFunc("/organizations", handlers.CreateOrganization(database)).Methods("POST")
+	protectedRouter.HandleFunc("/organizations", handlers.ListUserOrganizations(database)).Methods("GET")
+	protectedRouter.HandleFunc("/organizations/{id}", handlers.GetOrganization(database)).Methods("GET")
+	protectedRouter.HandleFunc("/organizations/{id}", handlers.UpdateOrganization(database)).Methods("PUT")
+	protectedRouter.HandleFunc("/organizations/{id}/members", handlers.ListOrganizationMembers(database)).Methods("GET")
+	protectedRouter.HandleFunc("/organizations/{id}/members", handlers.AddOrganizationMember(database)).Methods("POST")
+	protectedRouter.HandleFunc("/organizations/{id}/members/{memberId}/role", handlers.UpdateMemberRole(database)).Methods("PUT")
+	protectedRouter.HandleFunc("/organizations/{id}/members/{memberId}", handlers.RemoveOrganizationMember(database)).Methods("DELETE")
 
-	router.HandleFunc("/api/websites/{id}/regions", handlers.AssignWebsiteRegions(database)).Methods("PUT")
+	// Website endpoints (protected - with org filtering)
+	log.Printf("[ROUTER] Registering website endpoints...")
+	protectedRouter.HandleFunc("/websites", handlers.CreateWebsite(database)).Methods("POST")
+	protectedRouter.HandleFunc("/websites", handlers.ListWebsites(database)).Methods("GET")
+	protectedRouter.HandleFunc("/websites/{id}", handlers.GetWebsite(database)).Methods("GET")
+	protectedRouter.HandleFunc("/websites/{id}", handlers.UpdateWebsite(database)).Methods("PUT")
+	protectedRouter.HandleFunc("/websites/{id}", handlers.DeleteWebsite(database)).Methods("DELETE")
 
-	router.HandleFunc("/api/incidents", handlers.ListIncidents(database)).Methods("GET")
-	//user login and signup endpoints
-	router.HandleFunc("/api/auth/signup", handlers.Signup(database)).Methods("POST")
-	router.HandleFunc("/api/auth/login", handlers.Login(database)).Methods("POST")
+	// Monitoring endpoint (protected)
+	log.Printf("[ROUTER] Registering monitoring endpoint...")
+	protectedRouter.HandleFunc("/monitoring/{id}", handlers.ToggleMonitoring(database)).Methods("POST")
 
-	// TODO(frontend): Needed for Notifications screen
-	router.HandleFunc("/api/notifications/channels", handlers.CreateNotificationChannel(database)).Methods("POST")
-	router.HandleFunc("/api/notifications/test", handlers.SendNotification(database)).Methods("POST")
+	// Region endpoints (protected)
+	log.Printf("[ROUTER] Registering region endpoints...")
+	protectedRouter.HandleFunc("/regions", handlers.CreateRegion(database)).Methods("POST")
+	protectedRouter.HandleFunc("/regions", handlers.ListRegions(database)).Methods("GET")
+	protectedRouter.HandleFunc("/regions/{id}", handlers.GetRegion(database)).Methods("GET")
+	protectedRouter.HandleFunc("/regions/{id}", handlers.UpdateRegion(database)).Methods("PUT")
+	protectedRouter.HandleFunc("/regions/{id}", handlers.DeleteRegion(database)).Methods("DELETE")
 
-	// router.HandleFunc("/api/notifications/channels", handlers.ListNotificationChannels(database)).Methods("GET")
-	// router.HandleFunc("/api/notifications/channels/{id}", handlers.UpdateNotificationChannel(database)).Methods("PUT")
-	// router.HandleFunc("/api/notifications/channels/{id}", handlers.DeleteNotificationChannel(database)).Methods("DELETE")
-	// router.HandleFunc("/api/notifications/preferences", handlers.UpdateNotificationPreferences(database)).Methods("PUT")
+	// Detailed Information about a website endpoints (protected)
+	log.Printf("[ROUTER] Registering website details endpoints...")
+	protectedRouter.HandleFunc("/websites/{id}/details", handlers.GetDetailsWebsite(database)).Methods("GET")
+	protectedRouter.HandleFunc("/websites/{id}/regions", handlers.AssignWebsiteRegions(database)).Methods("PUT")
 
-	// TODO(frontend): Needed for Team screen
-	// router.HandleFunc("/api/team/members", handlers.ListTeamMembers(database)).Methods("GET")
-	// router.HandleFunc("/api/team/invitations", handlers.CreateTeamInvitation(database)).Methods("POST")
-	// router.HandleFunc("/api/team/members/{id}", handlers.UpdateTeamMemberRole(database)).Methods("PUT")
-	// router.HandleFunc("/api/team/members/{id}", handlers.RemoveTeamMember(database)).Methods("DELETE")
+	// Incidents endpoints (protected)
+	log.Printf("[ROUTER] Registering incidents endpoint...")
+	protectedRouter.HandleFunc("/incidents", handlers.ListIncidents(database)).Methods("GET")
 
-	// TODO(frontend): Needed for Settings screen
-	// router.HandleFunc("/api/settings/profile", handlers.GetProfileSettings(database)).Methods("GET")
-	// router.HandleFunc("/api/settings/profile", handlers.UpdateProfileSettings(database)).Methods("PUT")
-	// router.HandleFunc("/api/settings/workspace", handlers.GetWorkspaceSettings(database)).Methods("GET")
-	// router.HandleFunc("/api/settings/workspace", handlers.UpdateWorkspaceSettings(database)).Methods("PUT")
-	// router.HandleFunc("/api/settings/monitoring-defaults", handlers.GetMonitoringDefaults(database)).Methods("GET")
-	// router.HandleFunc("/api/settings/monitoring-defaults", handlers.UpdateMonitoringDefaults(database)).Methods("PUT")
-	// router.HandleFunc("/api/settings/api-keys", handlers.ListAPIKeys(database)).Methods("GET")
-	// router.HandleFunc("/api/settings/api-keys", handlers.CreateAPIKey(database)).Methods("POST")
-	// router.HandleFunc("/api/settings/api-keys/{id}", handlers.RevokeAPIKey(database)).Methods("DELETE")
+	// Notifications endpoints (protected)
+	log.Printf("[ROUTER] Registering notification endpoints...")
+	protectedRouter.HandleFunc("/notifications/channels", handlers.CreateNotificationChannel(database)).Methods("POST")
+	protectedRouter.HandleFunc("/notifications/test", handlers.SendNotification(database)).Methods("POST")
 
-	router.HandleFunc("/api/test", handlers.GetTest(database)).Methods("POST")
+	// Test endpoint (protected)
+	log.Printf("[ROUTER] Registering test endpoint...")
+	protectedRouter.HandleFunc("/test", handlers.GetTest(database)).Methods("POST")
 
+	log.Printf("[ROUTER] Router initialization complete - total endpoints registered")
 	return router
 }

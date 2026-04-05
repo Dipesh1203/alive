@@ -5,12 +5,1049 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:3000",
+    "host": "localhost:8000",
     "basePath": "/",
     "paths": {
+        "/api/auth/login": {
+            "post": {
+                "description": "Authenticates a user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Log in a user",
+                "parameters": [
+                    {
+                        "description": "Login request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/signup": {
+            "post": {
+                "description": "Creates a new user account with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign up a new user",
+                "parameters": [
+                    {
+                        "description": "Signup request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.SignupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/health": {
+            "get": {
+                "description": "Returns server health status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Health check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/incidents": {
+            "get": {
+                "description": "Returns global incident history with optional filters",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "incidents"
+                ],
+                "summary": "List incidents",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by website ID",
+                        "name": "websiteId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by region ID",
+                        "name": "regionId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "down,unknown,degraded,up",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "YYYY-MM-DD",
+                        "name": "startDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "YYYY-MM-DD",
+                        "name": "endDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "skip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "take",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/monitoring/{id}": {
+            "post": {
+                "description": "Enables or disables monitoring for a given website",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "monitoring"
+                ],
+                "summary": "Toggle website monitoring",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Website ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/db.WebsiteModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/notifications/channels": {
+            "post": {
+                "description": "Sets up email or push notification channel for the user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notifications"
+                ],
+                "summary": "Create a notification channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Notification channel request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.CreateNotificationChannelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.CreateNotificationChannelResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/notifications/test": {
+            "post": {
+                "description": "Sends a test notification via email or push",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notifications"
+                ],
+                "summary": "Send a test notification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Send notification request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.SendNotificationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizations": {
+            "get": {
+                "description": "Lists all organizations where the user is a member",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "List user's organizations",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handlers.OrganizationResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new organization with the authenticated user as admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "Create a new organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Organization request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.CreateOrganizationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.OrganizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizations/{id}": {
+            "get": {
+                "description": "Retrieves details of a specific organization",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "Get organization details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.OrganizationResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates organization details (admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "Update organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UpdateOrganizationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.OrganizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizations/{id}/members": {
+            "get": {
+                "description": "Lists all members of an organization",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "List organization members",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handlers.OrganizationMemberResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Adds a user to an organization by email (admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "Add member to organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Add member request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AddMemberRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.OrganizationMemberResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizations/{id}/members/{memberId}": {
+            "delete": {
+                "description": "Removes a user from an organization (admin only)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "Remove member from organization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Member ID / User ID",
+                        "name": "memberId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizations/{id}/members/{memberId}/role": {
+            "put": {
+                "description": "Updates a member's role in an organization (admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "organizations"
+                ],
+                "summary": "Update member role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Member ID / User ID",
+                        "name": "memberId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update role request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UpdateMemberRoleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.OrganizationMemberResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/profile": {
+            "get": {
+                "description": "Retrieves the authenticated user's profile information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Get current user's profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UserProfileResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates the authenticated user's profile information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Update current user's profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Profile update request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UserProfileRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UserProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/profile/preferences": {
+            "get": {
+                "description": "Retrieves the authenticated user's preferences",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Get user preferences",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates the authenticated user's notification and app preferences",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Update user preferences",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Preferences request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.PreferencesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UserProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/regions": {
             "get": {
-                "description": "Fetches all regions",
+                "description": "Retrieves all available monitoring regions",
                 "produces": [
                     "application/json"
                 ],
@@ -18,7 +1055,25 @@
                     "regions"
                 ],
                 "summary": "List regions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/db.RegionModel"
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -31,7 +1086,7 @@
                 }
             },
             "post": {
-                "description": "Takes a region name and saves it to the DB via Prisma",
+                "description": "Creates a new monitoring region",
                 "consumes": [
                     "application/json"
                 ],
@@ -44,6 +1099,13 @@
                 "summary": "Create a new region",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Create region request",
                         "name": "body",
                         "in": "body",
@@ -54,6 +1116,12 @@
                     }
                 ],
                 "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/db.RegionModel"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -77,7 +1145,7 @@
         },
         "/api/regions/{id}": {
             "get": {
-                "description": "Fetches a region by id",
+                "description": "Retrieves a specific region by ID",
                 "produces": [
                     "application/json"
                 ],
@@ -88,6 +1156,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Region ID",
                         "name": "id",
                         "in": "path",
@@ -95,6 +1170,12 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.RegionModel"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -125,7 +1206,7 @@
                 }
             },
             "put": {
-                "description": "Updates region name by id",
+                "description": "Updates a region's name",
                 "consumes": [
                     "application/json"
                 ],
@@ -137,6 +1218,13 @@
                 ],
                 "summary": "Update a region",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Region ID",
@@ -155,6 +1243,12 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.RegionModel"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -185,7 +1279,7 @@
                 }
             },
             "delete": {
-                "description": "Deletes a region by id",
+                "description": "Removes a region from the system",
                 "produces": [
                     "application/json"
                 ],
@@ -196,6 +1290,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Region ID",
                         "name": "id",
                         "in": "path",
@@ -203,6 +1304,12 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.RegionModel"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -233,17 +1340,23 @@
                 }
             }
         },
-        "/api/websites": {
-            "get": {
-                "description": "Fetches all websites",
+        "/api/test": {
+            "post": {
+                "description": "Internal test endpoint for verifying HTTP connectivity",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "websites"
+                    "internal"
                 ],
-                "summary": "List websites",
+                "summary": "Test endpoint (internal)",
                 "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.WebsiteInfo"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -254,33 +1367,39 @@
                         }
                     }
                 }
-            },
-            "put": {
-                "description": "Updates website name and/or URL by id",
-                "consumes": [
-                    "application/json"
-                ],
+            }
+        },
+        "/api/websites": {
+            "get": {
+                "description": "Fetches all websites in organizations where user is a member",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "websites"
                 ],
-                "summary": "Update a website",
+                "summary": "List websites",
                 "parameters": [
                     {
-                        "description": "Update website request",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/internal_handlers.UpdateWebsiteReq"
-                        }
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/db.WebsiteModel"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -300,7 +1419,7 @@
                 }
             },
             "post": {
-                "description": "Takes a website name/URL and saves it to the DB via Prisma",
+                "description": "Creates a new website for monitoring in the specified organization",
                 "consumes": [
                     "application/json"
                 ],
@@ -313,6 +1432,13 @@
                 "summary": "Create a new website",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Create website request",
                         "name": "body",
                         "in": "body",
@@ -323,8 +1449,23 @@
                     }
                 ],
                 "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/db.WebsiteModel"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -346,7 +1487,7 @@
         },
         "/api/websites/{id}": {
             "get": {
-                "description": "Fetches a website by id",
+                "description": "Retrieves a specific website by ID",
                 "produces": [
                     "application/json"
                 ],
@@ -357,6 +1498,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Website ID",
                         "name": "id",
                         "in": "path",
@@ -364,6 +1512,12 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.WebsiteModel"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -393,8 +1547,72 @@
                     }
                 }
             },
+            "put": {
+                "description": "Updates website name and/or URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "websites"
+                ],
+                "summary": "Update a website",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Website ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update website request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.UpdateWebsiteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.WebsiteModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
             "delete": {
-                "description": "Deletes a website by id",
+                "description": "Removes a website from the system",
                 "produces": [
                     "application/json"
                 ],
@@ -405,6 +1623,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Website ID",
                         "name": "id",
                         "in": "path",
@@ -412,6 +1637,177 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.WebsiteModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/websites/{id}/details": {
+            "get": {
+                "description": "Retrieves uptime ticks and latency data for a website within a date range",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "websites"
+                ],
+                "summary": "Get detailed website metrics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Website ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of records to skip",
+                        "name": "skip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of records to take",
+                        "name": "take",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date (YYYY-MM-DD)",
+                        "name": "startDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date (YYYY-MM-DD)",
+                        "name": "endDate",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/db.WebsiteTicksModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/websites/{id}/regions": {
+            "put": {
+                "description": "Replaces the region assignment used by monitoring workers for the provided website",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "websites"
+                ],
+                "summary": "Assign monitoring regions for a website",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Website ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Region IDs to assign",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AssignWebsiteRegionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.AssignWebsiteRegionsResponse"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -444,6 +1840,549 @@
         }
     },
     "definitions": {
+        "db.DevicesModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deviceType": {
+                    "type": "string"
+                },
+                "endpointArn": {
+                    "type": "string"
+                },
+                "fcmToken": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/db.UserModel"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.NotficationStatus": {
+            "type": "string",
+            "enum": [
+                "Sent",
+                "Failed",
+                "Pending"
+            ],
+            "x-enum-varnames": [
+                "NotficationStatusSent",
+                "NotficationStatusFailed",
+                "NotficationStatusPending"
+            ]
+        },
+        "db.NotificationModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "status": {
+                    "$ref": "#/definitions/db.NotficationStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/db.UserModel"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "website": {
+                    "$ref": "#/definitions/db.WebsiteModel"
+                },
+                "websiteId": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.OrganizationMemberModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/db.OrganizationModel"
+                },
+                "organizationId": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/db.UserModel"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.OrganizationModel": {
+            "type": "object",
+            "properties": {
+                "admin": {
+                    "$ref": "#/definitions/db.UserModel"
+                },
+                "adminId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.OrganizationMemberModel"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "websites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.WebsiteModel"
+                    }
+                }
+            }
+        },
+        "db.RegionModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "regionId": {
+                    "type": "string"
+                },
+                "regionName": {
+                    "type": "string"
+                },
+                "ticks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.WebsiteTicksModel"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.SubscriptionModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deviceType": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "topicArn": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/db.UserModel"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.UserModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.DevicesModel"
+                    }
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "notifications": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.NotificationModel"
+                    }
+                },
+                "organizationMemberships": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.OrganizationMemberModel"
+                    }
+                },
+                "organizationsAsAdmin": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.OrganizationModel"
+                    }
+                },
+                "password": {
+                    "type": "string"
+                },
+                "subscriptions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.SubscriptionModel"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userProfile": {
+                    "$ref": "#/definitions/db.UserProfileModel"
+                }
+            }
+        },
+        "db.UserProfileModel": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "preferences": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/db.UserModel"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.WebsiteModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isMonitoringEnabled": {
+                    "type": "boolean"
+                },
+                "notifications": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.NotificationModel"
+                    }
+                },
+                "organization": {
+                    "$ref": "#/definitions/db.OrganizationModel"
+                },
+                "organizationId": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/db.WebsiteStatus"
+                },
+                "ticks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.WebsiteTicksModel"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "websiteName": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.WebsiteStatus": {
+            "type": "string",
+            "enum": [
+                "Up",
+                "Down",
+                "Unknown"
+            ],
+            "x-enum-varnames": [
+                "WebsiteStatusUp",
+                "WebsiteStatusDown",
+                "WebsiteStatusUnknown"
+            ]
+        },
+        "db.WebsiteTicksModel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "latency": {
+                    "type": "integer"
+                },
+                "region": {
+                    "$ref": "#/definitions/db.RegionModel"
+                },
+                "upStatus": {
+                    "$ref": "#/definitions/db.WebsiteStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "website": {
+                    "$ref": "#/definitions/db.WebsiteModel"
+                },
+                "websiteId": {
+                    "type": "string"
+                },
+                "websiteRegionId": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.Cookie": {
+            "type": "object",
+            "properties": {
+                "domain": {
+                    "description": "optional",
+                    "type": "string"
+                },
+                "expires": {
+                    "description": "optional",
+                    "type": "string"
+                },
+                "httpOnly": {
+                    "type": "boolean"
+                },
+                "maxAge": {
+                    "description": "MaxAge=0 means no 'Max-Age' attribute specified.\nMaxAge\u003c0 means delete cookie now, equivalently 'Max-Age: 0'\nMaxAge\u003e0 means Max-Age attribute present and given in seconds",
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "partitioned": {
+                    "type": "boolean"
+                },
+                "path": {
+                    "description": "optional",
+                    "type": "string"
+                },
+                "quoted": {
+                    "description": "indicates whether the Value was originally quoted",
+                    "type": "boolean"
+                },
+                "raw": {
+                    "type": "string"
+                },
+                "rawExpires": {
+                    "description": "for reading cookies only",
+                    "type": "string"
+                },
+                "sameSite": {
+                    "$ref": "#/definitions/http.SameSite"
+                },
+                "secure": {
+                    "type": "boolean"
+                },
+                "unparsed": {
+                    "description": "Raw text of unparsed attribute-value pairs",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.Header": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.SameSite": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "SameSiteDefaultMode",
+                "SameSiteLaxMode",
+                "SameSiteStrictMode",
+                "SameSiteNoneMode"
+            ]
+        },
+        "internal_handlers.AddMemberRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.AssignWebsiteRegionsRequest": {
+            "type": "object",
+            "properties": {
+                "regionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "internal_handlers.AssignWebsiteRegionsResponse": {
+            "type": "object",
+            "properties": {
+                "regionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "websiteId": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.AuthResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/db.UserModel"
+                }
+            }
+        },
+        "internal_handlers.CreateNotificationChannelRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fcmToken": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.CreateNotificationChannelResponse": {
+            "type": "object",
+            "properties": {
+                "endpointArn": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.CreateOrganizationRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_handlers.CreateRegionRequest": {
             "type": "object",
             "properties": {
@@ -455,10 +2394,149 @@
         "internal_handlers.CreateWebsiteRequest": {
             "type": "object",
             "properties": {
+                "organizationId": {
+                    "type": "string"
+                },
                 "url": {
                     "type": "string"
                 },
                 "websiteName": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.OrganizationMemberResponse": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "organizationId": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.OrganizationResponse": {
+            "type": "object",
+            "properties": {
+                "adminId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.PreferencesRequest": {
+            "type": "object",
+            "properties": {
+                "preferences": {
+                    "type": "object",
+                    "additionalProperties": true
+                }
+            }
+        },
+        "internal_handlers.SendNotificationRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "endpointArn": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.SignupRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.UpdateMemberRoleRequest": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.UpdateOrganizationRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
                     "type": "string"
                 }
             }
@@ -479,6 +2557,88 @@
                 },
                 "websiteName": {
                     "type": "string"
+                }
+            }
+        },
+        "internal_handlers.UserProfileRequest": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.UserProfileResponse": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "preferences": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.WebsiteInfo": {
+            "type": "object",
+            "properties": {
+                "content_length": {
+                    "type": "integer"
+                },
+                "cookies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/http.Cookie"
+                    }
+                },
+                "headers": {
+                    "$ref": "#/definitions/http.Header"
+                },
+                "protocol": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
                 }
             }
         }
