@@ -31,6 +31,19 @@ type SendNotificationRequest struct {
 	Title       string `json:"title,omitempty"`
 }
 
+type TestEmailRequest struct {
+	Email   string `json:"email"`
+	Subject string `json:"subject,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
+type TestTemplateEmailRequest struct {
+	Email        string         `json:"email"`
+	Subject      string         `json:"subject,omitempty"`
+	TemplateName string         `json:"templateName"`
+	Data         map[string]any `json:"data,omitempty"`
+}
+
 // CreateNotificationChannel godoc
 // @Summary      Create a notification channel
 // @Description  Sets up email or push notification channel for the user
@@ -171,5 +184,116 @@ func SendNotification(database *db.PrismaClient) http.HandlerFunc {
 		default:
 			utils.WriteJSON(w, http.StatusBadRequest, map[string]string{"error": "type must be either 'email' or 'push'"})
 		}
+	}
+}
+
+// TestEmail godoc
+// @Summary      Test SES email sending
+// @Description  Sends a test email through AWS SES
+// @Tags         notifications
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header   string            true  "Bearer token"
+// @Param        body           body     TestEmailRequest   true  "Test email request"
+// @Success      200            {object} map[string]string
+// @Failure      400            {object} map[string]string
+// @Failure      500            {object} map[string]string
+// @Router       /api/notifications/test-email [post]
+func TestEmail(database *db.PrismaClient) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		_ = database
+		ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+		defer cancel()
+
+		var req TestEmailRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			utils.WriteJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+			return
+		}
+
+		email := strings.TrimSpace(req.Email)
+		if email == "" {
+			utils.WriteJSON(w, http.StatusBadRequest, map[string]string{"error": "email is required"})
+			return
+		}
+
+		subject := strings.TrimSpace(req.Subject)
+		if subject == "" {
+			subject = "Alive SES Test Email"
+		}
+
+		message := strings.TrimSpace(req.Message)
+		if message == "" {
+			message = "This is a test email from Alive to verify AWS SES setup."
+		}
+
+		service, err := awsservice.NewNotificationService(ctx)
+		if err != nil {
+			utils.WriteJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return
+		}
+
+		if err := service.SendEmail(ctx, email, subject, message); err != nil {
+			utils.WriteJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return
+		}
+
+		utils.WriteJSON(w, http.StatusOK, map[string]string{"message": "test email sent successfully"})
+	}
+}
+
+// TestTemplateEmail godoc
+// @Summary      Test template email sending
+// @Description  Renders an HTML template and sends it through AWS SES
+// @Tags         notifications
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header   string                     true  "Bearer token"
+// @Param        body           body     TestTemplateEmailRequest   true  "Template email request"
+// @Success      200            {object} map[string]string
+// @Failure      400            {object} map[string]string
+// @Failure      500            {object} map[string]string
+// @Router       /api/notifications/test-template-email [post]
+func TestTemplateEmail(database *db.PrismaClient) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		_ = database
+		ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+		defer cancel()
+
+		var req TestTemplateEmailRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			utils.WriteJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+			return
+		}
+
+		email := strings.TrimSpace(req.Email)
+		if email == "" {
+			utils.WriteJSON(w, http.StatusBadRequest, map[string]string{"error": "email is required"})
+			return
+		}
+
+		templateName := strings.TrimSpace(req.TemplateName)
+		if templateName == "" {
+			utils.WriteJSON(w, http.StatusBadRequest, map[string]string{"error": "templateName is required"})
+			return
+		}
+
+		subject := strings.TrimSpace(req.Subject)
+		if subject == "" {
+			subject = "Alive Template Email"
+		}
+
+		service, err := awsservice.NewNotificationService(ctx)
+		if err != nil {
+			utils.WriteJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return
+		}
+
+		if err := service.SendTemplateEmail(ctx, email, subject, templateName, req.Data); err != nil {
+			utils.WriteJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return
+		}
+
+		utils.WriteJSON(w, http.StatusOK, map[string]string{"message": "template email sent successfully"})
 	}
 }

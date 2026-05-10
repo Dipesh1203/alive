@@ -1,11 +1,14 @@
 package awsservice
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html/template"
 	"os"
+	"path/filepath"
 
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sesv2"
@@ -70,6 +73,69 @@ func (s *NotificationService) SendEmail(ctx context.Context, toEmail string, sub
 	}
 
 	return nil
+}
+
+func (s *NotificationService) SendHTMLEmail(ctx context.Context, toEmail string, subject string, htmlBody string) error {
+	if s.fromEmail == "" {
+		return errors.New("AWS_SES_FROM_EMAIL is not configured")
+	}
+
+	_, err := s.sesClient.SendEmail(ctx, &sesv2.SendEmailInput{
+		FromEmailAddress: &s.fromEmail,
+		Destination: &types.Destination{
+			ToAddresses: []string{toEmail},
+		},
+		Content: &types.EmailContent{
+			Simple: &types.Message{
+				Subject: &types.Content{Data: &subject},
+				Body: &types.Body{
+					Html: &types.Content{Data: &htmlBody},
+				},
+			},
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to send html email with ses: %w", err)
+	}
+
+	return nil
+}
+
+func (s *NotificationService) SendTemplateEmail(ctx context.Context, toEmail string, subject string, templateName string, data map[string]any) error {
+	htmlBody, err := renderEmailTemplate(templateName, data)
+	if err != nil {
+		return err
+	}
+
+	return s.SendHTMLEmail(ctx, toEmail, subject, htmlBody)
+}
+
+func renderEmailTemplate(templateName string, data map[string]any) (string, error) {
+	if templateName == "" {
+		return "", errors.New("template name is required")
+	}
+
+	if templateName != filepath.Base(templateName) {
+		return "", errors.New("template name is invalid")
+	}
+
+	templateDir := os.Getenv("EMAIL_TEMPLATE_DIR")
+	if templateDir == "" {
+		templateDir = filepath.Join("internal", "templates", "email")
+	}
+
+	templatePath := filepath.Join(templateDir, templateName)
+	tpl, err := template.ParseFiles(templatePath)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse email template: %w", err)
+	}
+
+	var out bytes.Buffer
+	if err := tpl.Execute(&out, data); err != nil {
+		return "", fmt.Errorf("failed to render email template: %w", err)
+	}
+
+	return out.String(), nil
 }
 
 func (s *NotificationService) RegisterPushEndpoint(ctx context.Context, fcmToken string) (string, error) {

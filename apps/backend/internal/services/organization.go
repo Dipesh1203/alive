@@ -53,6 +53,19 @@ func GetOrganizationByID(ctx context.Context, database *db.PrismaClient, orgID s
 	return org, nil
 }
 
+func CheckUserOrganizationMembership(ctx context.Context, database *db.PrismaClient, orgID, userID string) (bool, error) {
+	member, err := database.OrganizationMember.FindUnique(
+		db.OrganizationMember.UserIDOrganizationID(
+			db.OrganizationMember.UserID.Equals(userID),
+			db.OrganizationMember.OrganizationID.Equals(orgID),
+		),
+	).Exec(ctx)
+	if err != nil {
+		return false, errors.New("failed to check user organization membership")
+	}
+	return member != nil, nil
+}
+
 // ListUserOrganizations lists all organizations where user is a member
 func ListUserOrganizations(ctx context.Context, database *db.PrismaClient, userID string) ([]db.OrganizationModel, error) {
 	members, err := database.OrganizationMember.FindMany(

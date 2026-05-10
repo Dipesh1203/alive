@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"backend/internal/utils"
 	"context"
 	"log"
 	"net/http"
@@ -9,7 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const SecretKey = "your-secret-key-change-this-in-production"
+var SecretKey = utils.GoGetEnv("JWT_SECRET")
 
 // AuthMiddleware validates JWT tokens and extracts user information
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -35,6 +36,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		tokenString := parts[1]
 		log.Printf("[AUTH] Validating token for %s", r.URL.Path)
 
+		log.Printf("[JWT] jwt SecretKey: %s", SecretKey)
 		// Parse token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

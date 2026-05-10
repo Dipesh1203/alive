@@ -86,7 +86,7 @@ func CreateWebsite(database *db.PrismaClient) http.HandlerFunc {
 		log.Printf("[WEBSITE] Validating access to organization: %s", req.OrganizationID)
 		// Verify user has access to this organization
 		role, err := services.GetMemberRole(ctx, database, req.OrganizationID, userID)
-		if err != nil || role == "" {
+		if err != nil || role != "admin" {
 			log.Printf("[WEBSITE] ERROR: Access denied to organization %s for user %s", req.OrganizationID, userID)
 			http.Error(w, "Access denied to organization", http.StatusForbidden)
 			return

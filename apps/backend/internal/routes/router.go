@@ -91,6 +91,8 @@ func Router(database *db.PrismaClient) *mux.Router {
 	log.Printf("[ROUTER] Registering notification endpoints...")
 	protectedRouter.HandleFunc("/notifications/channels", handlers.CreateNotificationChannel(database)).Methods("POST")
 	protectedRouter.HandleFunc("/notifications/test", handlers.SendNotification(database)).Methods("POST")
+	protectedRouter.HandleFunc("/notifications/test-email", handlers.TestEmail(database)).Methods("POST")
+	protectedRouter.HandleFunc("/notifications/test-template-email", handlers.TestTemplateEmail(database)).Methods("POST")
 
 	// Test endpoint (protected)
 	log.Printf("[ROUTER] Registering test endpoint...")

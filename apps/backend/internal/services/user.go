@@ -40,6 +40,28 @@ func UserSignup(ctx context.Context, database *db.PrismaClient, email string, pa
 	}
 
 	log.Printf("[SERVICE] UserSignup: User %s created successfully with ID: %s", email, user.ID)
+
+	// Create a default empty profile for the new user so frontend can rely on /api/profile
+	go func() {
+		// run in background to avoid slowing signup response; use a background context
+		_, err := database.UserProfile.CreateOne(
+			db.UserProfile.User.Link(
+				db.User.ID.Equals(user.ID),
+			),
+			db.UserProfile.FirstName.Set(""),
+			db.UserProfile.LastName.Set(""),
+			db.UserProfile.Phone.Set(""),
+			db.UserProfile.Bio.Set(""),
+			db.UserProfile.Avatar.Set(""),
+			db.UserProfile.Preferences.Set([]byte("{}")),
+		).Exec(context.Background())
+		if err != nil {
+			log.Printf("[SERVICE] UserSignup: WARNING - failed to create default profile for user %s: %v", user.ID, err)
+		} else {
+			log.Printf("[SERVICE] UserSignup: Default profile created for user %s", user.ID)
+		}
+	}()
+
 	return user, nil
 }
 

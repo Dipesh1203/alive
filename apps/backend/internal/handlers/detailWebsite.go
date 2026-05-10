@@ -5,6 +5,7 @@ import (
 	"backend/internal/services"
 	"backend/internal/utils"
 	"context"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -64,7 +65,11 @@ func GetDetailsWebsite(database *db.PrismaClient) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		log.Printf("[DEBUG] Querying Ticks - ID: %s, Skip: %d, Take: %d, Start: %v, End: %v",
+			id, skip, take, startDate, endDate)
+
 		ticks, err2 := services.ListTicks(ctx, database, id, skip, take, &startDate, &endDate)
+		log.Printf("[WEBSITE] Retrieved %d ticks for website %s", len(ticks), id)
 
 		if err2 != nil {
 			http.Error(w, err2.Error(), http.StatusInternalServerError)

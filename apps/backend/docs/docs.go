@@ -1052,6 +1052,111 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/public/landing": {
+            "get": {
+                "description": "Returns dynamic content for landing page sections",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "landing"
+                ],
+                "summary": "Landing page overview data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "monthly or yearly",
+                        "name": "billing",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handlers.LandingOverviewResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/public/landing/faqs": {
+            "get": {
+                "description": "Returns FAQ items for the public landing page",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "landing"
+                ],
+                "summary": "Landing FAQs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handlers.LandingFAQ"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/public/landing/pricing": {
+            "get": {
+                "description": "Returns pricing plans for the public landing page",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "landing"
+                ],
+                "summary": "Landing pricing",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "monthly or yearly",
+                        "name": "billing",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handlers.LandingPricingPlan"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/public/landing/testimonials": {
+            "get": {
+                "description": "Returns testimonials for the public landing page",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "landing"
+                ],
+                "summary": "Landing testimonials",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handlers.LandingTestimonial"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/regions": {
             "get": {
                 "description": "Retrieves all available monitoring regions",
@@ -2416,6 +2521,132 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.LandingFAQ": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "question": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.LandingFeature": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.LandingOverviewResponse": {
+            "type": "object",
+            "properties": {
+                "faqs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handlers.LandingFAQ"
+                    }
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handlers.LandingFeature"
+                    }
+                },
+                "pricing": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handlers.LandingPricingPlan"
+                    }
+                },
+                "stats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handlers.LandingStat"
+                    }
+                },
+                "testimonials": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handlers.LandingTestimonial"
+                    }
+                }
+            }
+        },
+        "internal_handlers.LandingPricingPlan": {
+            "type": "object",
+            "properties": {
+                "cta": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "interval": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "popular": {
+                    "type": "boolean"
+                },
+                "price": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_handlers.LandingStat": {
+            "type": "object",
+            "properties": {
+                "hint": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handlers.LandingTestimonial": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "quote": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "role": {
                     "type": "string"
                 }
             }

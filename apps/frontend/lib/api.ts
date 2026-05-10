@@ -373,7 +373,16 @@ export async function login(email: string, password: string): Promise<AuthPayloa
     body: JSON.stringify({ email, password }),
   })
 
-  return mapAuthPayload(response)
+  const payload = mapAuthPayload(response)
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('auth_token', payload.token)
+    } catch {
+      // ignore storage errors
+    }
+  }
+
+  return payload
 }
 
 export async function signup(email: string, password: string): Promise<AuthPayload> {
@@ -382,7 +391,18 @@ export async function signup(email: string, password: string): Promise<AuthPaylo
     body: JSON.stringify({ email, password }),
   })
 
-  return mapAuthPayload(response)
+  const payload = mapAuthPayload(response)
+
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('auth_token', payload.token)
+    } catch {
+      // ignore storage errors
+    }
+  }
+
+  // frontend can fetch the profile after signup if needed; backend now creates a default profile
+  return payload
 }
 
 // Organization Management
@@ -531,6 +551,18 @@ export async function updateMyProfile(
     method: 'PUT',
     body: JSON.stringify({ firstName, lastName, phone, bio, avatar }),
   })
+}
+
+// Alias for creating a profile; backend will create a default profile at signup,
+// but this helper allows the frontend to explicitly set profile fields.
+export async function createProfile(
+  firstName: string,
+  lastName: string,
+  phone: string,
+  bio: string,
+  avatar?: string,
+): Promise<UserProfile> {
+  return updateMyProfile(firstName, lastName, phone, bio, avatar)
 }
 
 export async function getMyPreferences(): Promise<Record<string, unknown>> {

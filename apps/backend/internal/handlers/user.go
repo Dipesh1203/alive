@@ -192,7 +192,9 @@ func Login(database *db.PrismaClient) http.HandlerFunc {
 // generateJWTToken creates a JWT token for the given user
 func generateJWTToken(userID string, email string) (string, error) {
 	// Secret key - should be loaded from environment variable in production
-	secretKey := []byte("your-secret-key-change-this-in-production")
+	var SecretKey = utils.GoGetEnv("JWT_SECRET")
+	log.Printf("[JWT] jwt SecretKey: %s", SecretKey)
+	secretKey := []byte(SecretKey)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userID": userID,

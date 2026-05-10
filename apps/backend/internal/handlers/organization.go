@@ -249,6 +249,15 @@ func GetOrganization(database *db.PrismaClient) http.HandlerFunc {
 			})
 			return
 		}
+		log.Printf("[ORG] Checking if user has access to organization %s", orgID, r.Context().Value("userID"))
+		checkUser, err := services.CheckUserOrganizationMembership(ctx, database, orgID, r.Context().Value("userID").(string))
+		if err != nil || !checkUser {
+			log.Printf("[ORG] ERROR: User does not have access to organization %s - %v", orgID, err)
+			utils.WriteJSON(w, http.StatusNotFound, ErrorResponse{
+				Error: "User don't have access to this organization",
+			})
+			return
+		}
 
 		log.Printf("[ORG] Retrieved organization: %s (%s)", org.ID, org.Name)
 		utils.WriteJSON(w, http.StatusOK, OrganizationResponse{
@@ -288,6 +297,7 @@ func UpdateOrganization(database *db.PrismaClient) http.HandlerFunc {
 		log.Printf("[ORG] Checking admin permission for user %s on organization %s", userID, orgID)
 		// Check if user is admin
 		role, err := services.GetMemberRole(ctx, database, orgID, userID)
+		log.Printf("[ORG] User %s has role: %s on organization %s", userID, role, orgID)
 		if err != nil || role != "admin" {
 			log.Printf("[ORG] ERROR: Access denied (role: %s) for user %s on organization %s", role, userID, orgID)
 			utils.WriteJSON(w, http.StatusForbidden, ErrorResponse{
@@ -352,6 +362,13 @@ func ListOrganizationMembers(database *db.PrismaClient) http.HandlerFunc {
 
 		vars := mux.Vars(r)
 		orgID := vars["id"]
+		userCheck, err := services.CheckUserOrganizationMembership(ctx, database, orgID, r.Context().Value("userID").(string))
+		if err != nil || !userCheck {
+			utils.WriteJSON(w, http.StatusNotFound, ErrorResponse{
+				Error: "User don't have access to this organization",
+			})
+			return
+		}
 
 		members, err := services.ListOrganizationMembers(ctx, database, orgID)
 		if err != nil {
