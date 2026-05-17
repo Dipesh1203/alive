@@ -28,7 +28,7 @@ jobs:
           file: ./docker/Dockerfile.frontend
           build-args: |
             # IMPORTANT: Next.js needs this URL during the 'npm run build' phase
-            NEXT_PUBLIC_API_BASE_URL=http://${{ secrets.ROOT_IP }}:8080
+            NEXT_PUBLIC_API_BASE_URL=${{ secrets.BACKEND_BASE_URL }}
           push: true
           tags: dipesh2009/alive-frontend:${{ github.sha }}, dipesh2009/alive-frontend:main
 
