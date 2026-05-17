@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 func WriteJSON(w http.ResponseWriter, status int, v any) {
@@ -33,10 +31,6 @@ func CorsMiddleware(next http.Handler) http.Handler {
 	})
 }
 func GoGetEnv(key string) string {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
 	return os.Getenv(key)
 }
 
