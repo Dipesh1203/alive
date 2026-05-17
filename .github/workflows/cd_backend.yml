@@ -34,16 +34,21 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            set -euo pipefail
+
+            IMAGE="dipesh2009/go-backend:${{ github.sha }}"
+
             # Pull the new image
-            sudo docker pull dipesh2009/go-backend:${{ github.sha }}
-            
+            sudo docker pull "$IMAGE"
+
             # Stop and remove old container
             sudo docker stop backend_server 2>/dev/null || true
             sudo docker rm backend_server 2>/dev/null || true
-            
-            # Run new container (Passing DB_URL here is secure)
+
+            # Run new container
             sudo docker run --name backend_server -d \
+              --restart unless-stopped \
               -p 8080:8000 \
               -e DATABASE_URL='${{ secrets.ALIVE_DATABASE_URL }}' \
               -e JWT_SECRET='${{ secrets.ALIVE_JWT_SECRET }}' \
@@ -52,10 +57,19 @@ jobs:
               -e AWS_SECRET_ACCESS_KEY='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
               -e AWS_SES_FROM_EMAIL='${{ secrets.AWS_SES_FROM_EMAIL }}' \
               -e AWS_REGION='${{ secrets.AWS_REGION }}' \
-              dipesh2009/go-backend:${{ github.sha }}
+              "$IMAGE"
+
+            # Verify deployment actually succeeded.
+            sleep 3
+            if ! sudo docker ps --filter "name=^backend_server$" --filter "status=running" --format '{{.Names}}' | grep -q '^backend_server$'; then
+              echo "backend_server is not running after deploy. Recent logs:"
+              sudo docker logs --tail 200 backend_server || true
+              exit 1
+            fi
 
             # Remove only old backend images, keep current sha + stable tag.
             sudo docker images dipesh2009/go-backend --format '{{.Repository}}:{{.Tag}}' | \
               grep -v ':${{ github.sha }}$' | \
               grep -v ':main$' | \
-              xargs -r sudo docker rmi || true"
+              xargs -r sudo docker rmi || true
+          EOF

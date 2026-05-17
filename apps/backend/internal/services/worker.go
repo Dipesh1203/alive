@@ -116,7 +116,7 @@ func fetchAndDispatch(ctx context.Context, prisma *db.PrismaClient, taskChannel 
 
 func MonitoringWorker(id int, jobs <-chan Site, results chan<- ResultResponse, prisma *db.PrismaClient, ctx context.Context) {
 	client := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 60 * time.Second,
 	}
 
 	for site := range jobs {
