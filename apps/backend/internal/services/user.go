@@ -1,10 +1,11 @@
 package services
 
 import (
-	"backend/db"
 	"context"
 	"errors"
 	"log"
+
+	db "github.com/Dipesh1203/alive/backend/db"
 
 	"golang.org/x/crypto/bcrypt"
 )

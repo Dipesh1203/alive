@@ -9,6 +9,7 @@
     "dev:watch": "go run cmd/monitor/main.go",
     "dev:all": "go run cmd/server/main.go & go run cmd/monitor/main.go",
     "start": "./bin/server.exe",
+    "start:monitor": "./bin/monitor.exe",
     "lint": "go vet ./...",
     "generate": "go run github.com/steebchen/prisma-client-go generate",
     "migrate": "go run github.com/steebchen/prisma-client-go migrate dev"

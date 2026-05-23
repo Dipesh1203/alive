@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"backend/db"
-	"backend/internal/utils"
 	"fmt"
 	"net/http"
+
+	"github.com/Dipesh1203/alive/backend/db"
+
+	"github.com/Dipesh1203/alive/backend/internal/utils"
 )
 
 type WebsiteInfo struct {

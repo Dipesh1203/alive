@@ -1,10 +1,11 @@
 package services
 
 import (
-	"backend/db"
 	"context"
 	"errors"
 	"log"
+
+	db "github.com/Dipesh1203/alive/backend/db"
 )
 
 // CreateWebsite creates a website within an organization

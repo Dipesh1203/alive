@@ -1,15 +1,16 @@
 package services
 
 import (
-	"backend/db"
-	awsservice "backend/internal/services/aws"
-	"backend/internal/utils"
 	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	db "github.com/Dipesh1203/alive/backend/db"
+	awsservice "github.com/Dipesh1203/alive/backend/internal/services/aws"
+	"github.com/Dipesh1203/alive/backend/internal/utils"
 )
 
 type ResultResponse struct {

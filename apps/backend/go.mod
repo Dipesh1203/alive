@@ -1,4 +1,4 @@
-module backend
+module github.com/Dipesh1203/alive/backend
 
 go 1.25.6
 

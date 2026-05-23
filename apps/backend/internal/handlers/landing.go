@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"backend/db"
-	"backend/internal/utils"
 	"net/http"
 	"strings"
+
+	db "github.com/Dipesh1203/alive/backend/db"
+	"github.com/Dipesh1203/alive/backend/internal/utils"
 )
 
 type LandingStat struct {

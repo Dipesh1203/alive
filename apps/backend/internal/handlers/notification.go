@@ -1,14 +1,16 @@
 package handlers
 
 import (
-	"backend/db"
-	awsservice "backend/internal/services/aws"
-	"backend/internal/utils"
 	"context"
 	"encoding/json"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/Dipesh1203/alive/backend/db"
+
+	awsservice "github.com/Dipesh1203/alive/backend/internal/services/aws"
+	"github.com/Dipesh1203/alive/backend/internal/utils"
 )
 
 type CreateNotificationChannelRequest struct {

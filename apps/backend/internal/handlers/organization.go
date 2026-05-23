@@ -1,15 +1,16 @@
 package handlers
 
 import (
-	"backend/db"
-	"backend/internal/services"
-	"backend/internal/utils"
 	"context"
 	"encoding/json"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	db "github.com/Dipesh1203/alive/backend/db"
+	"github.com/Dipesh1203/alive/backend/internal/services"
+	"github.com/Dipesh1203/alive/backend/internal/utils"
 
 	"github.com/gorilla/mux"
 )

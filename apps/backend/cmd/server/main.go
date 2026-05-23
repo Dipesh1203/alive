@@ -1,12 +1,13 @@
 package main
 
 import (
-	"backend/db"
-	_ "backend/docs"
-	router "backend/internal/routes"
-	"backend/internal/utils"
 	"log"
 	"net/http"
+
+	"github.com/Dipesh1203/alive/backend/db"
+	_ "github.com/Dipesh1203/alive/backend/docs"
+	router "github.com/Dipesh1203/alive/backend/internal/routes"
+	"github.com/Dipesh1203/alive/backend/internal/utils"
 
 	"github.com/joho/godotenv"
 )

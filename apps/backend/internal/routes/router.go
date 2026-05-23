@@ -1,10 +1,11 @@
 package router
 
 import (
-	"backend/db"
-	"backend/internal/handlers"
-	"backend/internal/middleware"
 	"log"
+
+	db "github.com/Dipesh1203/alive/backend/db"
+	"github.com/Dipesh1203/alive/backend/internal/handlers"
+	"github.com/Dipesh1203/alive/backend/internal/middleware"
 
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
