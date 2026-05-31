@@ -3,12 +3,11 @@ package main
 import (
 	"backend/db"
 	_ "backend/docs"
+	"backend/internal/config"
 	router "backend/internal/routes"
 	"backend/internal/utils"
 	"log"
 	"net/http"
-
-	"github.com/joho/godotenv"
 )
 
 // @title My API Name
@@ -16,16 +15,7 @@ import (
 // @host localhost:8000
 // @BasePath /
 func main() {
-	log.Printf("[MAIN] Starting backend server initialization...")
-
-	//load env
-	if err := godotenv.Load(); err != nil {
-		log.Printf("[MAIN] Warning: No .env file found - using system environment variables")
-	} else {
-		log.Printf("[MAIN] Successfully loaded .env file")
-	}
-
-	// Database Setup
+	config.InitConfig()
 	log.Printf("[MAIN] Initializing database connection...")
 	client := db.NewClient()
 	if err := client.Prisma.Connect(); err != nil {

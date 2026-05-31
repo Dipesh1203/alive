@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"backend/db"
+	"backend/internal/config"
 	"backend/internal/services"
 	"backend/internal/utils"
 	"context"
@@ -192,7 +193,7 @@ func Login(database *db.PrismaClient) http.HandlerFunc {
 // generateJWTToken creates a JWT token for the given user
 func generateJWTToken(userID string, email string) (string, error) {
 	// Secret key - should be loaded from environment variable in production
-	var SecretKey = utils.GoGetEnv("JWT_SECRET")
+	SecretKey := config.Envs.JWT_SECRET
 	log.Printf("[JWT] jwt SecretKey: %s", SecretKey)
 	secretKey := []byte(SecretKey)
 

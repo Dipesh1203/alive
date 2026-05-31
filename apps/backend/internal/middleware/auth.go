@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"backend/internal/utils"
+	"backend/internal/config"
 	"context"
 	"log"
 	"net/http"
@@ -9,8 +9,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 )
-
-var SecretKey = utils.GoGetEnv("JWT_SECRET")
 
 // AuthMiddleware validates JWT tokens and extracts user information
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -24,6 +22,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			http.Error(w, "Missing authorization header", http.StatusUnauthorized)
 			return
 		}
+		log.Default().Printf("[AUTH] Found authorization header for %s: %s", r.URL.Path, authHeader)
 
 		// Extract bearer token
 		parts := strings.Split(authHeader, " ")
@@ -35,7 +34,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		tokenString := parts[1]
 		log.Printf("[AUTH] Validating token for %s", r.URL.Path)
-
+		SecretKey := config.Envs.JWT_SECRET
 		log.Printf("[JWT] jwt SecretKey: %s", SecretKey)
 		// Parse token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -44,6 +43,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			}
 			return []byte(SecretKey), nil
 		})
+		log.Default().Printf("[AUTH] Token parsing result for %s: valid=%v, error=%v", r.URL.Path, token != nil && token.Valid, err)
 
 		if err != nil || !token.Valid {
 			log.Printf("[AUTH] ERROR: Invalid or expired token for %s - %v", r.URL.Path, err)
@@ -100,6 +100,7 @@ func OptionalAuthMiddleware(next http.Handler) http.Handler {
 					if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 						return nil, jwt.ErrSignatureInvalid
 					}
+					SecretKey := config.Envs.JWT_SECRET
 					return []byte(SecretKey), nil
 				})
 
