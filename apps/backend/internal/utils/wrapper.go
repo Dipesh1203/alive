@@ -36,7 +36,9 @@ func GoGetEnv(key string) string {
 
 func GetEnv(key, fallback string) string {
 	value := os.Getenv(key)
+	log.Printf("[GETENV] Fetching environment variable '%s'", key)
 	if len(value) == 0 {
+		log.Printf("[GETENV] Environment variable '%s' is not set, using fallback value", key)
 		return fallback
 	}
 	return value
