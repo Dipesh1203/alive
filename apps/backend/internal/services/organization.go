@@ -1,10 +1,11 @@
 package services
 
 import (
-	"backend/db"
 	"context"
 	"errors"
 	"log"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 )
 
 // CreateOrganization creates a new organization with the provided admin

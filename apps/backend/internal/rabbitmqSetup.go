@@ -1,11 +1,12 @@
 package internal
 
 import (
-	"backend/internal/utils"
 	"context"
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/Dipesh1203/alive/apps/backend/internal/utils"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )

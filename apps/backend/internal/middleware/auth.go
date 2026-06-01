@@ -1,11 +1,12 @@
 package middleware
 
 import (
-	"backend/internal/config"
 	"context"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/Dipesh1203/alive/apps/backend/internal/config"
 
 	"github.com/golang-jwt/jwt/v5"
 )

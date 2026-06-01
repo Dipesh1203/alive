@@ -15,7 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sesv2/types"
 	snssdk "github.com/aws/aws-sdk-go-v2/service/sns"
 
-	snsservice "backend/internal/services/aws/sns"
+	snsservice "github.com/Dipesh1203/alive/apps/backend/internal/services/aws/sns"
 )
 
 type NotificationService struct {

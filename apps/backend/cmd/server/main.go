@@ -1,13 +1,15 @@
 package main
 
 import (
-	"backend/db"
-	_ "backend/docs"
-	"backend/internal/config"
-	router "backend/internal/routes"
-	"backend/internal/utils"
 	"log"
 	"net/http"
+
+	_ "github.com/Dipesh1203/alive/apps/backend/docs"
+	"github.com/Dipesh1203/alive/apps/backend/internal/config"
+	router "github.com/Dipesh1203/alive/apps/backend/internal/routes"
+	"github.com/Dipesh1203/alive/apps/backend/internal/utils"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 )
 
 // @title My API Name
