@@ -1,0 +1,11 @@
+{
+  "buildCommand": "bun run build",
+  "installCommand": "go mod tidy && bun install",
+  "outputDirectory": "apps/backend/bin",
+  "framework": "go",
+  "git": {
+    "deploymentEnabled": {
+      "main-vercel": true
+    }
+  }
+}
