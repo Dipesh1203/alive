@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "swagger:init": "swag init -g cmd/server/main.go --parseDependency --parseInternal",
-    "build": "go build -o bin/server.exe cmd/server/main.go",
+    "build": "npm run generate && go build -o bin/server.exe cmd/server/main.go",
     "dev": "go run cmd/server/main.go",
     "dev:watch": "go run cmd/monitor/main.go",
     "dev:all": "go run cmd/server/main.go & go run cmd/monitor/main.go",
