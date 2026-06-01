@@ -1,8 +1,9 @@
 package services
 
 import (
-	"backend/db"
 	"context"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 )
 
 func CreateRegion(ctx context.Context, database *db.PrismaClient, regionName string) (*db.RegionModel, error) {

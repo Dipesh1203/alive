@@ -1,9 +1,10 @@
 package services
 
 import (
-	"backend/db"
 	"context"
 	"time"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 )
 
 const layout = "2006-01-02"

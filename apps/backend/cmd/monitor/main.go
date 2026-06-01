@@ -1,14 +1,16 @@
 package main
 
 import (
-	"backend/db"
-	_ "backend/docs"
-	"backend/internal/services"
 	"context"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/Dipesh1203/alive/apps/backend/docs"
+	"github.com/Dipesh1203/alive/apps/backend/internal/services"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 
 	"github.com/joho/godotenv"
 )

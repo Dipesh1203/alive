@@ -1,13 +1,14 @@
 package services
 
 import (
-	"backend/db"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"

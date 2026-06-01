@@ -1,12 +1,13 @@
 package services
 
 import (
-	"backend/db"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 )
 
 // CreateUserProfile creates a user profile

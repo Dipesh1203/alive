@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"backend/db"
-	"backend/internal/services"
-	"backend/internal/utils"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -12,6 +9,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Dipesh1203/alive/apps/backend/internal/services"
+	"github.com/Dipesh1203/alive/apps/backend/internal/utils"
+
+	"github.com/Dipesh1203/alive/apps/backend/db"
 
 	"github.com/gorilla/mux"
 )
