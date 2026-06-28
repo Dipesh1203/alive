@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 
@@ -28,26 +29,26 @@ type Site struct {
 }
 
 var BASE_URL = utils.GoGetEnv("BASE_URL")
+var WorkerRegion = utils.GoGetEnv("WORKER_REGION")
 var baseUrl = utils.GetEnv("BASE_URL", "http://localhost:3000/website")
+var workerCount = utils.GetEnv("WORKER_COUNT", "1")
 
 func StartMonitoring(ctx context.Context, prisma *db.PrismaClient) {
 	taskChannel := make(chan Site, 10)
 	resultsChannel := make(chan ResultResponse, 10)
 	var wg sync.WaitGroup
-	for w := 1; w <= 1; w++ {
-		log.Printf("Starting worker %d\n", w)
+	totalWorker, err := strconv.Atoi(workerCount)
+	if err != nil {
+		log.Printf("Invalid WORKER_COUNT value: %s. Defaulting to 1 worker.", workerCount)
+		totalWorker = 1
+	}
+	for w := 1; w <= totalWorker; w++ {
 		wg.Add(1)
 		go func(workerID int) {
 			defer wg.Done()
 			MonitoringWorker(w, taskChannel, resultsChannel, prisma, ctx)
 		}(w)
 	}
-
-	go func() {
-		for res := range resultsChannel {
-			fmt.Printf("📊 Result processed for %s: %s (%v)\n", res.WebsiteID, res.Status, res.Latency)
-		}
-	}()
 
 	ticker := time.NewTicker(100 * time.Second)
 	defer ticker.Stop()
@@ -75,6 +76,7 @@ func fetchAndDispatch(ctx context.Context, prisma *db.PrismaClient, taskChannel 
 		return
 	}
 
+	//todo only fetch for websiteRegion don't fetch all regions and use queue
 	for _, site := range activeWebsites {
 		markerTicks, err := prisma.WebsiteTicks.FindMany(
 			db.WebsiteTicks.WebsiteID.Equals(site.ID),

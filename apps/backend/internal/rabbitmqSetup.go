@@ -12,12 +12,14 @@ import (
 )
 
 func SetupRabbitMq() {
-	// log.Printf("[RABBITMQ] Attempting to connect to RabbitMQ at amqp://guest:guest@localhost:5672\")\n
-	conn, err2 := amqp.Dial("amqp://guest:guest@localhost:5672")
-	// log.Printf("[RABBITMQ] Connection result: %v\", conn)
-	utils.FailOnError(err2, "Fail to connect Rabbit MQ channel")
+	rabbitmqURL := utils.GetEnv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672")
+	log.Printf("[RABBITMQ] Attempting to connect to RabbitMQ at %s)", rabbitmqURL)
+	conn, err2 := amqp.Dial(rabbitmqURL)
+	log.Printf("[RABBITMQ] Connection result: %v", conn)
 
+	utils.FailOnError(err2, "Fail to connect Rabbit MQ channel")
 	log.Printf("[RABBITMQ] Opening channel...")
+
 	ch, err3 := conn.Channel()
 	utils.FailOnError(err3, "Fail to open channel")
 	defer ch.Close()

@@ -22,7 +22,7 @@ import (
 func main() {
 	//load env
 	if err := godotenv.Load(); err != nil {
-		log.Println("Warning: No .env file found")
+		log.Fatal("Error loading .env file:", err)
 	}
 	client := db.NewClient()
 	if err := client.Prisma.Connect(); err != nil {
@@ -31,14 +31,11 @@ func main() {
 
 	defer func() {
 		if err := client.Prisma.Disconnect(); err != nil {
-			log.Printf("Error disconnecting: %v", err)
+			log.Fatal("Error disconnecting: %v", err)
 		}
 	}()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	log.Println("Worker: Starting Monitoring Service...")
+	go services.StartMonitoring(ctx, client)
 
-	services.StartMonitoring(ctx, client)
-
-	log.Println("Worker: Shutting down gracefully")
 }

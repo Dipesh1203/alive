@@ -33,11 +33,6 @@ func main() {
 		log.Printf("[MAIN] Database connection closed")
 	}()
 
-	// RabbitMQ
-	// internal.SetupRabbitMq()
-	// ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	// defer stop()
-	// go services.StartMonitoring(ctx, client)
 	log.Printf("[MAIN] Setting up router...")
 	r := router.Router(client)
 	handler := utils.CorsMiddleware(r)
