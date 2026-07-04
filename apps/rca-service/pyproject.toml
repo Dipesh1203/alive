@@ -1,0 +1,13 @@
+[project]
+name = "rcs-service"
+version = "0.1.0"
+description = "Alive logging Root Cause analysis that help in doing detailed analysis "
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.138.1",
+    "jq>=1.11.0",
+    "langchain-community>=0.4.2",
+    "langchain-text-splitters>=1.1.2",
+    "langchain[google-genai]>=1.3.11",
+]
