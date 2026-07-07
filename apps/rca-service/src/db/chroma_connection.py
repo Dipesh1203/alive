@@ -1,11 +1,12 @@
-from langchain.vectorstores import Chroma
+from functools import lru_cache 
+from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from fastapi import Depends
 from utils.config import CHROMA_API_KEY, CHROMA_TENANT, CHROMA_DATABASE
 
 @lru_cache(maxsize=1)
 def get_embeddings() -> GoogleGenerativeAIEmbeddings:
-    return GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+    return GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
 @lru_cache(maxsize=1)
 def get_vector_store() -> Chroma:

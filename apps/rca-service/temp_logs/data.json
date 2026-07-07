@@ -1,0 +1,22 @@
+    [{
+      "timestamp": "2026-07-04T09:45:12.345Z",
+      "message": "User 8472 successfully authenticated.",
+      "level": "INFO",
+      "service": "auth-service",
+      "request_id": "a1b2c3d4-e5f6-7890-abcd-ef0123456789"
+    },
+    {
+      "timestamp": "2026-07-04T09:46:15.678Z",
+      "message": "Data retrieval for user 8472 completed.",
+      "level": "INFO",
+      "service": "data-service",
+      "request_id": "b2c3d4e5-f678-9012-abcd-ef0123456789"
+    },
+    {
+      "timestamp": "2026-07-04T09:47:20.123Z",
+      "message": "Payment processing for order 12345 failed due to insufficient funds.",
+      "level": "ERROR",
+      "service": "payment-service",
+      "request_id": "c3d4e5f6-7890-1234-abcd-ef0123456789"
+    }
+  ]

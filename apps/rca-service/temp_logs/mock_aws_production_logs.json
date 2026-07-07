@@ -1,0 +1,2500 @@
+[
+  {
+    "timestamp": "2026-07-07T17:11:28.146206Z",
+    "aws_request_id": "64a01f35-c2c3-4f9c-bcfd-f729957546ed",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-a9e71568-85844ad612fd4185",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_5067"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:28.211206Z",
+    "aws_request_id": "64a01f35-c2c3-4f9c-bcfd-f729957546ed",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a9e71568-85844ad612fd4185",
+    "message": "Processing transaction for checkout asset: ord_72930",
+    "context": {
+      "amount": 406.64,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:30.211206Z",
+    "aws_request_id": "64a01f35-c2c3-4f9c-bcfd-f729957546ed",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a9e71568-85844ad612fd4185",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 90
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.211206Z",
+    "aws_request_id": "64a01f35-c2c3-4f9c-bcfd-f729957546ed",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a9e71568-85844ad612fd4185",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.226206Z",
+    "aws_request_id": "64a01f35-c2c3-4f9c-bcfd-f729957546ed",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-a9e71568-85844ad612fd4185",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3659
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.239206Z",
+    "aws_request_id": "8dbd5e9e-cf8a-4196-bcd5-c22210d5b3fe",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-2a8f2e32-b7aef1e51b141ac5",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1580"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.332206Z",
+    "aws_request_id": "8dbd5e9e-cf8a-4196-bcd5-c22210d5b3fe",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2a8f2e32-b7aef1e51b141ac5",
+    "message": "Processing transaction for checkout asset: ord_55810",
+    "context": {
+      "amount": 341.53,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.399206Z",
+    "aws_request_id": "8dbd5e9e-cf8a-4196-bcd5-c22210d5b3fe",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2a8f2e32-b7aef1e51b141ac5",
+    "message": "Successfully completed execution flow for order ord_55810",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.449206Z",
+    "aws_request_id": "b7fe221a-c5c4-479e-b349-c4a81a568ab9",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-b0d84b9c-d0ab44a9febfbe12",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_2500"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:31.534206Z",
+    "aws_request_id": "b7fe221a-c5c4-479e-b349-c4a81a568ab9",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-b0d84b9c-d0ab44a9febfbe12",
+    "message": "Processing transaction for checkout asset: ord_60612",
+    "context": {
+      "amount": 334.25,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:32.534206Z",
+    "aws_request_id": "b7fe221a-c5c4-479e-b349-c4a81a568ab9",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-b0d84b9c-d0ab44a9febfbe12",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 107
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.534206Z",
+    "aws_request_id": "b7fe221a-c5c4-479e-b349-c4a81a568ab9",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-b0d84b9c-d0ab44a9febfbe12",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "java.sql.SQLTransientConnectionException",
+      "message": "Connection is not available, request timed out after 3000ms.",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.549206Z",
+    "aws_request_id": "b7fe221a-c5c4-479e-b349-c4a81a568ab9",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-b0d84b9c-d0ab44a9febfbe12",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 4139
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.589206Z",
+    "aws_request_id": "0db459af-6211-4d7c-8d88-094729e8a589",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-b791365b-8309a57655e9a1d8",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9445"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.661206Z",
+    "aws_request_id": "0db459af-6211-4d7c-8d88-094729e8a589",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-b791365b-8309a57655e9a1d8",
+    "message": "Processing transaction for checkout asset: ord_74452",
+    "context": {
+      "amount": 84.77,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.725206Z",
+    "aws_request_id": "0db459af-6211-4d7c-8d88-094729e8a589",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-b791365b-8309a57655e9a1d8",
+    "message": "Successfully completed execution flow for order ord_74452",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.741206Z",
+    "aws_request_id": "efa4aa73-f1b2-4b9a-8738-6cd3049e4513",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-d28111c7-16bd1165dc082ed8",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_4168"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.795206Z",
+    "aws_request_id": "efa4aa73-f1b2-4b9a-8738-6cd3049e4513",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-d28111c7-16bd1165dc082ed8",
+    "message": "Processing transaction for checkout asset: ord_88621",
+    "context": {
+      "amount": 465.95,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.849206Z",
+    "aws_request_id": "efa4aa73-f1b2-4b9a-8738-6cd3049e4513",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-d28111c7-16bd1165dc082ed8",
+    "message": "Successfully completed execution flow for order ord_88621",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.892206Z",
+    "aws_request_id": "e4f80ce3-4bd8-486c-afae-fdd24732bf11",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-eecde21b-c360f2663b615792",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_2380"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:33.925206Z",
+    "aws_request_id": "e4f80ce3-4bd8-486c-afae-fdd24732bf11",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-eecde21b-c360f2663b615792",
+    "message": "Processing transaction for checkout asset: ord_51048",
+    "context": {
+      "amount": 335.18,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:34.925206Z",
+    "aws_request_id": "e4f80ce3-4bd8-486c-afae-fdd24732bf11",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-eecde21b-c360f2663b615792",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 100
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:35.925206Z",
+    "aws_request_id": "e4f80ce3-4bd8-486c-afae-fdd24732bf11",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-eecde21b-c360f2663b615792",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:35.940206Z",
+    "aws_request_id": "e4f80ce3-4bd8-486c-afae-fdd24732bf11",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-eecde21b-c360f2663b615792",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3810
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:35.982206Z",
+    "aws_request_id": "cf8d551a-f1c6-490f-8ae4-25b41a331897",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-c918874-ef05915bcb459b9c",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9955"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:36.022206Z",
+    "aws_request_id": "cf8d551a-f1c6-490f-8ae4-25b41a331897",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-c918874-ef05915bcb459b9c",
+    "message": "Processing transaction for checkout asset: ord_59132",
+    "context": {
+      "amount": 255.01,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:37.022206Z",
+    "aws_request_id": "cf8d551a-f1c6-490f-8ae4-25b41a331897",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-c918874-ef05915bcb459b9c",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 103
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.022206Z",
+    "aws_request_id": "cf8d551a-f1c6-490f-8ae4-25b41a331897",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-c918874-ef05915bcb459b9c",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.037206Z",
+    "aws_request_id": "cf8d551a-f1c6-490f-8ae4-25b41a331897",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-c918874-ef05915bcb459b9c",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3492
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.086206Z",
+    "aws_request_id": "b7544062-a6e1-4c83-a12a-2f1d46ba82d7",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-26db116d-6f46220c59129dcb",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_7021"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.116206Z",
+    "aws_request_id": "b7544062-a6e1-4c83-a12a-2f1d46ba82d7",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-26db116d-6f46220c59129dcb",
+    "message": "Processing transaction for checkout asset: ord_87431",
+    "context": {
+      "amount": 450.38,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.259206Z",
+    "aws_request_id": "b7544062-a6e1-4c83-a12a-2f1d46ba82d7",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-26db116d-6f46220c59129dcb",
+    "message": "Successfully completed execution flow for order ord_87431",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.308206Z",
+    "aws_request_id": "062e3aea-a87d-435d-8f84-4b5727c7fb28",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-a4f65dfc-2b376a61db3cd34e",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_5530"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.407206Z",
+    "aws_request_id": "062e3aea-a87d-435d-8f84-4b5727c7fb28",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a4f65dfc-2b376a61db3cd34e",
+    "message": "Processing transaction for checkout asset: ord_81422",
+    "context": {
+      "amount": 27.38,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.529206Z",
+    "aws_request_id": "062e3aea-a87d-435d-8f84-4b5727c7fb28",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a4f65dfc-2b376a61db3cd34e",
+    "message": "Successfully completed execution flow for order ord_81422",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.552206Z",
+    "aws_request_id": "4e7f4f93-013d-4db2-aced-ca393819e9f0",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-4a19ee14-b83e16f8aded4f17",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1468"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.616206Z",
+    "aws_request_id": "4e7f4f93-013d-4db2-aced-ca393819e9f0",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-4a19ee14-b83e16f8aded4f17",
+    "message": "Processing transaction for checkout asset: ord_70972",
+    "context": {
+      "amount": 324.38,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.753206Z",
+    "aws_request_id": "4e7f4f93-013d-4db2-aced-ca393819e9f0",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-4a19ee14-b83e16f8aded4f17",
+    "message": "Successfully completed execution flow for order ord_70972",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.780206Z",
+    "aws_request_id": "a0c38238-781c-41a3-b20b-3379bef04abd",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-c8345f4c-658bc2a0f72380db",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_4835"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.806206Z",
+    "aws_request_id": "a0c38238-781c-41a3-b20b-3379bef04abd",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-c8345f4c-658bc2a0f72380db",
+    "message": "Processing transaction for checkout asset: ord_63124",
+    "context": {
+      "amount": 121.12,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.924206Z",
+    "aws_request_id": "a0c38238-781c-41a3-b20b-3379bef04abd",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-c8345f4c-658bc2a0f72380db",
+    "message": "Successfully completed execution flow for order ord_63124",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.958206Z",
+    "aws_request_id": "9f93512b-5f04-413c-8308-3cc8ac1decad",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-807ee6a2-f9b63c405b299e95",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3627"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:38.980206Z",
+    "aws_request_id": "9f93512b-5f04-413c-8308-3cc8ac1decad",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-807ee6a2-f9b63c405b299e95",
+    "message": "Processing transaction for checkout asset: ord_68833",
+    "context": {
+      "amount": 207.67,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:40.980206Z",
+    "aws_request_id": "9f93512b-5f04-413c-8308-3cc8ac1decad",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-807ee6a2-f9b63c405b299e95",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 97
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:41.980206Z",
+    "aws_request_id": "9f93512b-5f04-413c-8308-3cc8ac1decad",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-807ee6a2-f9b63c405b299e95",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:41.995206Z",
+    "aws_request_id": "9f93512b-5f04-413c-8308-3cc8ac1decad",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-807ee6a2-f9b63c405b299e95",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3409
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:42.019206Z",
+    "aws_request_id": "9835cab5-d2fe-42aa-a734-8029fa916d34",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-a59f4826-8308206963864115",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9114"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:42.071206Z",
+    "aws_request_id": "9835cab5-d2fe-42aa-a734-8029fa916d34",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a59f4826-8308206963864115",
+    "message": "Processing transaction for checkout asset: ord_87121",
+    "context": {
+      "amount": 82.29,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:43.071206Z",
+    "aws_request_id": "9835cab5-d2fe-42aa-a734-8029fa916d34",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a59f4826-8308206963864115",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 86
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:44.071206Z",
+    "aws_request_id": "9835cab5-d2fe-42aa-a734-8029fa916d34",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a59f4826-8308206963864115",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:44.086206Z",
+    "aws_request_id": "9835cab5-d2fe-42aa-a734-8029fa916d34",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-a59f4826-8308206963864115",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 4499
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:44.130206Z",
+    "aws_request_id": "11415db3-d969-498a-a7d0-b444947c85a8",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-3d9b5bbe-b765192cb7f0b6c2",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1372"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:44.197206Z",
+    "aws_request_id": "11415db3-d969-498a-a7d0-b444947c85a8",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-3d9b5bbe-b765192cb7f0b6c2",
+    "message": "Processing transaction for checkout asset: ord_83787",
+    "context": {
+      "amount": 357.67,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:46.197206Z",
+    "aws_request_id": "11415db3-d969-498a-a7d0-b444947c85a8",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-3d9b5bbe-b765192cb7f0b6c2",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 97
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:47.197206Z",
+    "aws_request_id": "11415db3-d969-498a-a7d0-b444947c85a8",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-3d9b5bbe-b765192cb7f0b6c2",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "java.sql.SQLTransientConnectionException",
+      "message": "Connection is not available, request timed out after 3000ms.",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:47.212206Z",
+    "aws_request_id": "11415db3-d969-498a-a7d0-b444947c85a8",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-3d9b5bbe-b765192cb7f0b6c2",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3779
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:47.239206Z",
+    "aws_request_id": "2e74f45b-1c11-4d36-ab40-f3052e1a12e6",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-1d95fa61-6fcac5bca48e9a00",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1184"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:47.285206Z",
+    "aws_request_id": "2e74f45b-1c11-4d36-ab40-f3052e1a12e6",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-1d95fa61-6fcac5bca48e9a00",
+    "message": "Processing transaction for checkout asset: ord_54676",
+    "context": {
+      "amount": 84.98,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:48.285206Z",
+    "aws_request_id": "2e74f45b-1c11-4d36-ab40-f3052e1a12e6",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-1d95fa61-6fcac5bca48e9a00",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 108
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.285206Z",
+    "aws_request_id": "2e74f45b-1c11-4d36-ab40-f3052e1a12e6",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-1d95fa61-6fcac5bca48e9a00",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "java.sql.SQLTransientConnectionException",
+      "message": "Connection is not available, request timed out after 3000ms.",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.300206Z",
+    "aws_request_id": "2e74f45b-1c11-4d36-ab40-f3052e1a12e6",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-1d95fa61-6fcac5bca48e9a00",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3481
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.319206Z",
+    "aws_request_id": "7d60ca0f-deb9-4ac2-b04f-191e3049331c",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-8660b5b5-ff61b6503d989289",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_6797"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.360206Z",
+    "aws_request_id": "7d60ca0f-deb9-4ac2-b04f-191e3049331c",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-8660b5b5-ff61b6503d989289",
+    "message": "Processing transaction for checkout asset: ord_76372",
+    "context": {
+      "amount": 106.68,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.467206Z",
+    "aws_request_id": "7d60ca0f-deb9-4ac2-b04f-191e3049331c",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-8660b5b5-ff61b6503d989289",
+    "message": "Successfully completed execution flow for order ord_76372",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.479206Z",
+    "aws_request_id": "4995449a-6ac8-4fa8-a346-7f021b1a5be2",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-e0c67eca-f5a848f33f6d9f7f",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3844"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.560206Z",
+    "aws_request_id": "4995449a-6ac8-4fa8-a346-7f021b1a5be2",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-e0c67eca-f5a848f33f6d9f7f",
+    "message": "Processing transaction for checkout asset: ord_80830",
+    "context": {
+      "amount": 21.24,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.731206Z",
+    "aws_request_id": "4995449a-6ac8-4fa8-a346-7f021b1a5be2",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-e0c67eca-f5a848f33f6d9f7f",
+    "message": "Successfully completed execution flow for order ord_80830",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.780206Z",
+    "aws_request_id": "1185df28-1fa4-49f7-bb4b-826a25eea899",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-805de217-b244ca933fda8b99",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_4391"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.836206Z",
+    "aws_request_id": "1185df28-1fa4-49f7-bb4b-826a25eea899",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-805de217-b244ca933fda8b99",
+    "message": "Processing transaction for checkout asset: ord_79351",
+    "context": {
+      "amount": 167.3,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.910206Z",
+    "aws_request_id": "1185df28-1fa4-49f7-bb4b-826a25eea899",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-805de217-b244ca933fda8b99",
+    "message": "Successfully completed execution flow for order ord_79351",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.958206Z",
+    "aws_request_id": "2ab83210-22ec-46c3-a0df-ea1f48798321",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-2019f3e-29f91a6fc35fa5f2",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1191"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:49.993206Z",
+    "aws_request_id": "2ab83210-22ec-46c3-a0df-ea1f48798321",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2019f3e-29f91a6fc35fa5f2",
+    "message": "Processing transaction for checkout asset: ord_58196",
+    "context": {
+      "amount": 55.36,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:51.993206Z",
+    "aws_request_id": "2ab83210-22ec-46c3-a0df-ea1f48798321",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2019f3e-29f91a6fc35fa5f2",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 111
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:52.993206Z",
+    "aws_request_id": "2ab83210-22ec-46c3-a0df-ea1f48798321",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2019f3e-29f91a6fc35fa5f2",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "com.amazonaws.services.s3.model.AmazonS3Exception",
+      "message": "Access Denied (Service: Amazon S3; Status Code: 403)",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:53.008206Z",
+    "aws_request_id": "2ab83210-22ec-46c3-a0df-ea1f48798321",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-2019f3e-29f91a6fc35fa5f2",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 4298
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:53.034206Z",
+    "aws_request_id": "8fe53bb5-8ae1-4f50-963e-95ac954e5d06",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-69949125-24add3b63fc26a85",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9416"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:53.113206Z",
+    "aws_request_id": "8fe53bb5-8ae1-4f50-963e-95ac954e5d06",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-69949125-24add3b63fc26a85",
+    "message": "Processing transaction for checkout asset: ord_81061",
+    "context": {
+      "amount": 351.35,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:54.113206Z",
+    "aws_request_id": "8fe53bb5-8ae1-4f50-963e-95ac954e5d06",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-69949125-24add3b63fc26a85",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 101
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:55.113206Z",
+    "aws_request_id": "8fe53bb5-8ae1-4f50-963e-95ac954e5d06",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-69949125-24add3b63fc26a85",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:55.128206Z",
+    "aws_request_id": "8fe53bb5-8ae1-4f50-963e-95ac954e5d06",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-69949125-24add3b63fc26a85",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3516
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:55.144206Z",
+    "aws_request_id": "584f9568-6a0c-4295-aa8d-c5fa6237cdea",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-ae31fec0-799781134ef215cd",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_6526"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:55.229206Z",
+    "aws_request_id": "584f9568-6a0c-4295-aa8d-c5fa6237cdea",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ae31fec0-799781134ef215cd",
+    "message": "Processing transaction for checkout asset: ord_88823",
+    "context": {
+      "amount": 344.77,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:57.229206Z",
+    "aws_request_id": "584f9568-6a0c-4295-aa8d-c5fa6237cdea",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ae31fec0-799781134ef215cd",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 85
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.229206Z",
+    "aws_request_id": "584f9568-6a0c-4295-aa8d-c5fa6237cdea",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ae31fec0-799781134ef215cd",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.244206Z",
+    "aws_request_id": "584f9568-6a0c-4295-aa8d-c5fa6237cdea",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-ae31fec0-799781134ef215cd",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3645
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.256206Z",
+    "aws_request_id": "dcaac98b-f449-4031-9b7e-9167a911e620",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-a62db59-9fd42a12347cb7a1",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9436"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.328206Z",
+    "aws_request_id": "dcaac98b-f449-4031-9b7e-9167a911e620",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a62db59-9fd42a12347cb7a1",
+    "message": "Processing transaction for checkout asset: ord_69718",
+    "context": {
+      "amount": 325.36,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.413206Z",
+    "aws_request_id": "dcaac98b-f449-4031-9b7e-9167a911e620",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-a62db59-9fd42a12347cb7a1",
+    "message": "Successfully completed execution flow for order ord_69718",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.448206Z",
+    "aws_request_id": "9ac254fe-68d6-4c2b-a5d5-035d2841499e",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-64e7277c-73c69a53ba9c1b5c",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_5589"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.504206Z",
+    "aws_request_id": "9ac254fe-68d6-4c2b-a5d5-035d2841499e",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-64e7277c-73c69a53ba9c1b5c",
+    "message": "Processing transaction for checkout asset: ord_84310",
+    "context": {
+      "amount": 233.02,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.673206Z",
+    "aws_request_id": "9ac254fe-68d6-4c2b-a5d5-035d2841499e",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-64e7277c-73c69a53ba9c1b5c",
+    "message": "Successfully completed execution flow for order ord_84310",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.684206Z",
+    "aws_request_id": "780f86c9-1966-4310-9724-83b1aa2743d6",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-cd2af4a4-7589fc917dab3df",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9349"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:58.764206Z",
+    "aws_request_id": "780f86c9-1966-4310-9724-83b1aa2743d6",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-cd2af4a4-7589fc917dab3df",
+    "message": "Processing transaction for checkout asset: ord_77897",
+    "context": {
+      "amount": 237.58,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:11:59.764206Z",
+    "aws_request_id": "780f86c9-1966-4310-9724-83b1aa2743d6",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-cd2af4a4-7589fc917dab3df",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 103
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:00.764206Z",
+    "aws_request_id": "780f86c9-1966-4310-9724-83b1aa2743d6",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-cd2af4a4-7589fc917dab3df",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:00.779206Z",
+    "aws_request_id": "780f86c9-1966-4310-9724-83b1aa2743d6",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-cd2af4a4-7589fc917dab3df",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 4400
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:00.829206Z",
+    "aws_request_id": "7fc0a68b-f372-4b33-8370-01102e2aad55",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-814e1cb3-87c242d3554588aa",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1629"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:00.925206Z",
+    "aws_request_id": "7fc0a68b-f372-4b33-8370-01102e2aad55",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-814e1cb3-87c242d3554588aa",
+    "message": "Processing transaction for checkout asset: ord_69099",
+    "context": {
+      "amount": 170.64,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:01.091206Z",
+    "aws_request_id": "7fc0a68b-f372-4b33-8370-01102e2aad55",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-814e1cb3-87c242d3554588aa",
+    "message": "Successfully completed execution flow for order ord_69099",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:01.106206Z",
+    "aws_request_id": "d57b960f-2281-4afa-ba3b-0f71949d6ec1",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-d40f50-e7394c4bebf2c9cf",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3696"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:01.169206Z",
+    "aws_request_id": "d57b960f-2281-4afa-ba3b-0f71949d6ec1",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-d40f50-e7394c4bebf2c9cf",
+    "message": "Processing transaction for checkout asset: ord_58247",
+    "context": {
+      "amount": 461.38,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:02.169206Z",
+    "aws_request_id": "d57b960f-2281-4afa-ba3b-0f71949d6ec1",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-d40f50-e7394c4bebf2c9cf",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 111
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.169206Z",
+    "aws_request_id": "d57b960f-2281-4afa-ba3b-0f71949d6ec1",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-d40f50-e7394c4bebf2c9cf",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "com.amazonaws.services.s3.model.AmazonS3Exception",
+      "message": "Access Denied (Service: Amazon S3; Status Code: 403)",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.184206Z",
+    "aws_request_id": "d57b960f-2281-4afa-ba3b-0f71949d6ec1",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-d40f50-e7394c4bebf2c9cf",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3013
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.205206Z",
+    "aws_request_id": "92cbb59b-02f0-4105-9abc-53cdcafaf006",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-2e87250b-65d4bddb69117b53",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_8803"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.287206Z",
+    "aws_request_id": "92cbb59b-02f0-4105-9abc-53cdcafaf006",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2e87250b-65d4bddb69117b53",
+    "message": "Processing transaction for checkout asset: ord_71629",
+    "context": {
+      "amount": 402.65,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.475206Z",
+    "aws_request_id": "92cbb59b-02f0-4105-9abc-53cdcafaf006",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2e87250b-65d4bddb69117b53",
+    "message": "Successfully completed execution flow for order ord_71629",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.496206Z",
+    "aws_request_id": "54c5e1ab-fdda-47af-950a-c21699f34815",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-6348c111-af163a91c8cd4bf6",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_8198"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.545206Z",
+    "aws_request_id": "54c5e1ab-fdda-47af-950a-c21699f34815",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-6348c111-af163a91c8cd4bf6",
+    "message": "Processing transaction for checkout asset: ord_60566",
+    "context": {
+      "amount": 58.3,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.607206Z",
+    "aws_request_id": "54c5e1ab-fdda-47af-950a-c21699f34815",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-6348c111-af163a91c8cd4bf6",
+    "message": "Successfully completed execution flow for order ord_60566",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.626206Z",
+    "aws_request_id": "6d9abdf1-53fe-4ab2-be8d-07ca1c846c1d",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-5a91a33b-9528fda7a41695c4",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_7706"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.672206Z",
+    "aws_request_id": "6d9abdf1-53fe-4ab2-be8d-07ca1c846c1d",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-5a91a33b-9528fda7a41695c4",
+    "message": "Processing transaction for checkout asset: ord_84413",
+    "context": {
+      "amount": 228.01,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.785206Z",
+    "aws_request_id": "6d9abdf1-53fe-4ab2-be8d-07ca1c846c1d",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-5a91a33b-9528fda7a41695c4",
+    "message": "Successfully completed execution flow for order ord_84413",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.812206Z",
+    "aws_request_id": "0989ca46-7ca3-44a1-8717-6d0c639d957b",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-421cb1ab-6720aae48727afa7",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_4252"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:03.863206Z",
+    "aws_request_id": "0989ca46-7ca3-44a1-8717-6d0c639d957b",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-421cb1ab-6720aae48727afa7",
+    "message": "Processing transaction for checkout asset: ord_67347",
+    "context": {
+      "amount": 190.23,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:04.863206Z",
+    "aws_request_id": "0989ca46-7ca3-44a1-8717-6d0c639d957b",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-421cb1ab-6720aae48727afa7",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 108
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:05.863206Z",
+    "aws_request_id": "0989ca46-7ca3-44a1-8717-6d0c639d957b",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-421cb1ab-6720aae48727afa7",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "java.sql.SQLTransientConnectionException",
+      "message": "Connection is not available, request timed out after 3000ms.",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:05.878206Z",
+    "aws_request_id": "0989ca46-7ca3-44a1-8717-6d0c639d957b",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-421cb1ab-6720aae48727afa7",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3350
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:05.906206Z",
+    "aws_request_id": "7ca78237-75a7-4934-978f-24e4748de293",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-ddb2f487-d509793f11678a01",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3196"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:05.962206Z",
+    "aws_request_id": "7ca78237-75a7-4934-978f-24e4748de293",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ddb2f487-d509793f11678a01",
+    "message": "Processing transaction for checkout asset: ord_57689",
+    "context": {
+      "amount": 178.94,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:07.962206Z",
+    "aws_request_id": "7ca78237-75a7-4934-978f-24e4748de293",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ddb2f487-d509793f11678a01",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 88
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:08.962206Z",
+    "aws_request_id": "7ca78237-75a7-4934-978f-24e4748de293",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ddb2f487-d509793f11678a01",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "com.amazonaws.services.s3.model.AmazonS3Exception",
+      "message": "Access Denied (Service: Amazon S3; Status Code: 403)",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:08.977206Z",
+    "aws_request_id": "7ca78237-75a7-4934-978f-24e4748de293",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-ddb2f487-d509793f11678a01",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3249
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:09.005206Z",
+    "aws_request_id": "7b41e921-bb4a-4cab-ad01-6a79be137ac0",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-2c8dbd60-8df45fa0304e16d",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3191"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:09.049206Z",
+    "aws_request_id": "7b41e921-bb4a-4cab-ad01-6a79be137ac0",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2c8dbd60-8df45fa0304e16d",
+    "message": "Processing transaction for checkout asset: ord_81188",
+    "context": {
+      "amount": 446.73,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:10.049206Z",
+    "aws_request_id": "7b41e921-bb4a-4cab-ad01-6a79be137ac0",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2c8dbd60-8df45fa0304e16d",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 119
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.049206Z",
+    "aws_request_id": "7b41e921-bb4a-4cab-ad01-6a79be137ac0",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-2c8dbd60-8df45fa0304e16d",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.064206Z",
+    "aws_request_id": "7b41e921-bb4a-4cab-ad01-6a79be137ac0",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-2c8dbd60-8df45fa0304e16d",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 4471
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.107206Z",
+    "aws_request_id": "ac40f28b-360c-4a8d-842f-677b200d95c1",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-f2ca4ab2-683048a0bda76d5f",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3118"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.172206Z",
+    "aws_request_id": "ac40f28b-360c-4a8d-842f-677b200d95c1",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-f2ca4ab2-683048a0bda76d5f",
+    "message": "Processing transaction for checkout asset: ord_63234",
+    "context": {
+      "amount": 242.64,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.289206Z",
+    "aws_request_id": "ac40f28b-360c-4a8d-842f-677b200d95c1",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-f2ca4ab2-683048a0bda76d5f",
+    "message": "Successfully completed execution flow for order ord_63234",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.318206Z",
+    "aws_request_id": "36451347-5352-4e7d-a9ee-e1aa185dd0ce",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-fb098cae-a1013bd0ad063063",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_7683"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:11.345206Z",
+    "aws_request_id": "36451347-5352-4e7d-a9ee-e1aa185dd0ce",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-fb098cae-a1013bd0ad063063",
+    "message": "Processing transaction for checkout asset: ord_56817",
+    "context": {
+      "amount": 456.47,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:13.345206Z",
+    "aws_request_id": "36451347-5352-4e7d-a9ee-e1aa185dd0ce",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-fb098cae-a1013bd0ad063063",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 87
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.345206Z",
+    "aws_request_id": "36451347-5352-4e7d-a9ee-e1aa185dd0ce",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-fb098cae-a1013bd0ad063063",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.360206Z",
+    "aws_request_id": "36451347-5352-4e7d-a9ee-e1aa185dd0ce",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-fb098cae-a1013bd0ad063063",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3896
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.393206Z",
+    "aws_request_id": "889b0b2c-638e-44f6-90d4-b5fa1d41409c",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-4769ac13-738d34694b168c03",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_6625"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.435206Z",
+    "aws_request_id": "889b0b2c-638e-44f6-90d4-b5fa1d41409c",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-4769ac13-738d34694b168c03",
+    "message": "Processing transaction for checkout asset: ord_75636",
+    "context": {
+      "amount": 491.08,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.598206Z",
+    "aws_request_id": "889b0b2c-638e-44f6-90d4-b5fa1d41409c",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-4769ac13-738d34694b168c03",
+    "message": "Successfully completed execution flow for order ord_75636",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.619206Z",
+    "aws_request_id": "24466326-6116-4983-a31f-a7dd77e8adc0",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-abca9913-98b0e22ffc2e672a",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9885"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.672206Z",
+    "aws_request_id": "24466326-6116-4983-a31f-a7dd77e8adc0",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-abca9913-98b0e22ffc2e672a",
+    "message": "Processing transaction for checkout asset: ord_52703",
+    "context": {
+      "amount": 492.11,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.853206Z",
+    "aws_request_id": "24466326-6116-4983-a31f-a7dd77e8adc0",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-abca9913-98b0e22ffc2e672a",
+    "message": "Successfully completed execution flow for order ord_52703",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.895206Z",
+    "aws_request_id": "bd85cf27-f8da-4c8d-9854-2baf270b4f5e",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-ba6277c5-109b4330d5d2eede",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_7076"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:14.916206Z",
+    "aws_request_id": "bd85cf27-f8da-4c8d-9854-2baf270b4f5e",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ba6277c5-109b4330d5d2eede",
+    "message": "Processing transaction for checkout asset: ord_57575",
+    "context": {
+      "amount": 43.44,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:15.034206Z",
+    "aws_request_id": "bd85cf27-f8da-4c8d-9854-2baf270b4f5e",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-ba6277c5-109b4330d5d2eede",
+    "message": "Successfully completed execution flow for order ord_57575",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:15.054206Z",
+    "aws_request_id": "3522485e-b9a8-4dae-9588-1cbbfc09c518",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-905e9691-c321919c6ee6125e",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_7007"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:15.115206Z",
+    "aws_request_id": "3522485e-b9a8-4dae-9588-1cbbfc09c518",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-905e9691-c321919c6ee6125e",
+    "message": "Processing transaction for checkout asset: ord_54729",
+    "context": {
+      "amount": 77.91,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:17.115206Z",
+    "aws_request_id": "3522485e-b9a8-4dae-9588-1cbbfc09c518",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-905e9691-c321919c6ee6125e",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 103
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.115206Z",
+    "aws_request_id": "3522485e-b9a8-4dae-9588-1cbbfc09c518",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-905e9691-c321919c6ee6125e",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "com.amazonaws.services.s3.model.AmazonS3Exception",
+      "message": "Access Denied (Service: Amazon S3; Status Code: 403)",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.130206Z",
+    "aws_request_id": "3522485e-b9a8-4dae-9588-1cbbfc09c518",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-905e9691-c321919c6ee6125e",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3957
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.175206Z",
+    "aws_request_id": "c2b4abc5-6ed6-4065-a97e-7a692e0900d4",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-bbf32768-dc19a1e19314b712",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_8226"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.238206Z",
+    "aws_request_id": "c2b4abc5-6ed6-4065-a97e-7a692e0900d4",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-bbf32768-dc19a1e19314b712",
+    "message": "Processing transaction for checkout asset: ord_77555",
+    "context": {
+      "amount": 358.71,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.424206Z",
+    "aws_request_id": "c2b4abc5-6ed6-4065-a97e-7a692e0900d4",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-bbf32768-dc19a1e19314b712",
+    "message": "Successfully completed execution flow for order ord_77555",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.452206Z",
+    "aws_request_id": "602ed7ef-66dd-4654-8198-a29599842ef6",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-10ed764d-d69e79a249e6b1f8",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_4028"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:18.510206Z",
+    "aws_request_id": "602ed7ef-66dd-4654-8198-a29599842ef6",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-10ed764d-d69e79a249e6b1f8",
+    "message": "Processing transaction for checkout asset: ord_61553",
+    "context": {
+      "amount": 108.83,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:19.510206Z",
+    "aws_request_id": "602ed7ef-66dd-4654-8198-a29599842ef6",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-10ed764d-d69e79a249e6b1f8",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 120
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:20.510206Z",
+    "aws_request_id": "602ed7ef-66dd-4654-8198-a29599842ef6",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-10ed764d-d69e79a249e6b1f8",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "java.sql.SQLTransientConnectionException",
+      "message": "Connection is not available, request timed out after 3000ms.",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:20.525206Z",
+    "aws_request_id": "602ed7ef-66dd-4654-8198-a29599842ef6",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-10ed764d-d69e79a249e6b1f8",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3954
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:20.565206Z",
+    "aws_request_id": "65df0886-776c-4c11-b3a9-6ef6f281861b",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-6070fa74-c95013adc52b3075",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_4741"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:20.654206Z",
+    "aws_request_id": "65df0886-776c-4c11-b3a9-6ef6f281861b",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-6070fa74-c95013adc52b3075",
+    "message": "Processing transaction for checkout asset: ord_52036",
+    "context": {
+      "amount": 28.91,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:22.654206Z",
+    "aws_request_id": "65df0886-776c-4c11-b3a9-6ef6f281861b",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-6070fa74-c95013adc52b3075",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 94
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:23.654206Z",
+    "aws_request_id": "65df0886-776c-4c11-b3a9-6ef6f281861b",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-6070fa74-c95013adc52b3075",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:23.669206Z",
+    "aws_request_id": "65df0886-776c-4c11-b3a9-6ef6f281861b",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-6070fa74-c95013adc52b3075",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3366
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:23.701206Z",
+    "aws_request_id": "0d64f996-b878-4906-bd95-bd8c4623912f",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-8240d7-3fac0bf066e1bbc5",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_3225"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:23.785206Z",
+    "aws_request_id": "0d64f996-b878-4906-bd95-bd8c4623912f",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-8240d7-3fac0bf066e1bbc5",
+    "message": "Processing transaction for checkout asset: ord_83940",
+    "context": {
+      "amount": 39.99,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:25.785206Z",
+    "aws_request_id": "0d64f996-b878-4906-bd95-bd8c4623912f",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-8240d7-3fac0bf066e1bbc5",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 88
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:26.785206Z",
+    "aws_request_id": "0d64f996-b878-4906-bd95-bd8c4623912f",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-8240d7-3fac0bf066e1bbc5",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "com.amazonaws.services.s3.model.AmazonS3Exception",
+      "message": "Access Denied (Service: Amazon S3; Status Code: 403)",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:26.800206Z",
+    "aws_request_id": "0d64f996-b878-4906-bd95-bd8c4623912f",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-8240d7-3fac0bf066e1bbc5",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3318
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:26.829206Z",
+    "aws_request_id": "adb1599b-a560-4c0c-8a73-a5fd982c6674",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-57ac36e1-e630798a5fb7cca2",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9274"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:26.886206Z",
+    "aws_request_id": "adb1599b-a560-4c0c-8a73-a5fd982c6674",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-57ac36e1-e630798a5fb7cca2",
+    "message": "Processing transaction for checkout asset: ord_80609",
+    "context": {
+      "amount": 169.42,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:27.886206Z",
+    "aws_request_id": "adb1599b-a560-4c0c-8a73-a5fd982c6674",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-57ac36e1-e630798a5fb7cca2",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 110
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:28.886206Z",
+    "aws_request_id": "adb1599b-a560-4c0c-8a73-a5fd982c6674",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-57ac36e1-e630798a5fb7cca2",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "com.amazonaws.services.s3.model.AmazonS3Exception",
+      "message": "Access Denied (Service: Amazon S3; Status Code: 403)",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:28.901206Z",
+    "aws_request_id": "adb1599b-a560-4c0c-8a73-a5fd982c6674",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-57ac36e1-e630798a5fb7cca2",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3778
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:28.937206Z",
+    "aws_request_id": "66cb763a-b308-444a-ac48-aa652dc086c0",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-80f40136-44f2e300ac0521e6",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_6272"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:29.031206Z",
+    "aws_request_id": "66cb763a-b308-444a-ac48-aa652dc086c0",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-80f40136-44f2e300ac0521e6",
+    "message": "Processing transaction for checkout asset: ord_61994",
+    "context": {
+      "amount": 109.53,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:30.031206Z",
+    "aws_request_id": "66cb763a-b308-444a-ac48-aa652dc086c0",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-80f40136-44f2e300ac0521e6",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 108
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.031206Z",
+    "aws_request_id": "66cb763a-b308-444a-ac48-aa652dc086c0",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-80f40136-44f2e300ac0521e6",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "redis.clients.jedis.exceptions.JedisConnectionException",
+      "message": "Could not get a resource from the pool",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.046206Z",
+    "aws_request_id": "66cb763a-b308-444a-ac48-aa652dc086c0",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-80f40136-44f2e300ac0521e6",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3332
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.084206Z",
+    "aws_request_id": "cd88f570-cf6c-436f-92a4-047e3af663cc",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-91306057-4411fdb502dd7eab",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_1859"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.165206Z",
+    "aws_request_id": "cd88f570-cf6c-436f-92a4-047e3af663cc",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-91306057-4411fdb502dd7eab",
+    "message": "Processing transaction for checkout asset: ord_77976",
+    "context": {
+      "amount": 13.7,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.342206Z",
+    "aws_request_id": "cd88f570-cf6c-436f-92a4-047e3af663cc",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-91306057-4411fdb502dd7eab",
+    "message": "Successfully completed execution flow for order ord_77976",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.353206Z",
+    "aws_request_id": "6f830459-c04e-4f37-8013-54fd6ff63a8a",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-72c68bbb-ad8646cb51ce2d28",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_5628"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.403206Z",
+    "aws_request_id": "6f830459-c04e-4f37-8013-54fd6ff63a8a",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-72c68bbb-ad8646cb51ce2d28",
+    "message": "Processing transaction for checkout asset: ord_55038",
+    "context": {
+      "amount": 463.41,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.495206Z",
+    "aws_request_id": "6f830459-c04e-4f37-8013-54fd6ff63a8a",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-72c68bbb-ad8646cb51ce2d28",
+    "message": "Successfully completed execution flow for order ord_55038",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.518206Z",
+    "aws_request_id": "a5bafeb9-3eaf-4ca7-8cc6-b0b13213c0ca",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-18c4c762-34cd66953f753195",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_5823"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.585206Z",
+    "aws_request_id": "a5bafeb9-3eaf-4ca7-8cc6-b0b13213c0ca",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-18c4c762-34cd66953f753195",
+    "message": "Processing transaction for checkout asset: ord_75236",
+    "context": {
+      "amount": 146.33,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.704206Z",
+    "aws_request_id": "a5bafeb9-3eaf-4ca7-8cc6-b0b13213c0ca",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-18c4c762-34cd66953f753195",
+    "message": "Successfully completed execution flow for order ord_75236",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.739206Z",
+    "aws_request_id": "60f165e6-1f2e-4147-ab78-64a46ed600a6",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-f7cad277-c28c4ab652b58649",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_9024"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:31.765206Z",
+    "aws_request_id": "60f165e6-1f2e-4147-ab78-64a46ed600a6",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-f7cad277-c28c4ab652b58649",
+    "message": "Processing transaction for checkout asset: ord_55112",
+    "context": {
+      "amount": 498.63,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:33.765206Z",
+    "aws_request_id": "60f165e6-1f2e-4147-ab78-64a46ed600a6",
+    "log_level": "WARN",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-f7cad277-c28c4ab652b58649",
+    "message": "Resource constraint detected. Upstream database queue length exceeds threshold.",
+    "context": {
+      "current_queue_depth": 114
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:34.765206Z",
+    "aws_request_id": "60f165e6-1f2e-4147-ab78-64a46ed600a6",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-f7cad277-c28c4ab652b58649",
+    "message": "Critical dependency failure inside runtime loop processing.",
+    "error": {
+      "exception": "java.sql.SQLTransientConnectionException",
+      "message": "Connection is not available, request timed out after 3000ms.",
+      "stack_trace": "at com.app.internal.Executor.run(Executor.java:14)\n at com.app.payment.Handler.process(Handler.java:89)"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:34.780206Z",
+    "aws_request_id": "60f165e6-1f2e-4147-ab78-64a46ed600a6",
+    "log_level": "FATAL",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-f7cad277-c28c4ab652b58649",
+    "message": "Upstream microservice returned response status code 500.",
+    "context": {
+      "http_status": 500,
+      "duration_ms": 3728
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:34.826206Z",
+    "aws_request_id": "c9fb8882-7c48-4948-8287-d8b5054a772f",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-174fffc5-dc62c8519ead1123",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_6971"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:34.863206Z",
+    "aws_request_id": "c9fb8882-7c48-4948-8287-d8b5054a772f",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-174fffc5-dc62c8519ead1123",
+    "message": "Processing transaction for checkout asset: ord_74856",
+    "context": {
+      "amount": 345.69,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:34.987206Z",
+    "aws_request_id": "c9fb8882-7c48-4948-8287-d8b5054a772f",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-174fffc5-dc62c8519ead1123",
+    "message": "Successfully completed execution flow for order ord_74856",
+    "context": {
+      "status": "SUCCESS"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:35.031206Z",
+    "aws_request_id": "49755f67-c6e0-4d98-a046-591a32c1b143",
+    "log_level": "INFO",
+    "service": "api-gateway",
+    "environment": "production",
+    "trace_id": "1-55524849-24418b99c995738f",
+    "message": "Incoming POST request to /v1/checkout",
+    "context": {
+      "user_id": "usr_6330"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:35.082206Z",
+    "aws_request_id": "49755f67-c6e0-4d98-a046-591a32c1b143",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-55524849-24418b99c995738f",
+    "message": "Processing transaction for checkout asset: ord_76435",
+    "context": {
+      "amount": 442.96,
+      "currency": "INR"
+    }
+  },
+  {
+    "timestamp": "2026-07-07T17:12:35.276206Z",
+    "aws_request_id": "49755f67-c6e0-4d98-a046-591a32c1b143",
+    "log_level": "INFO",
+    "service": "payment-service",
+    "environment": "production",
+    "trace_id": "1-55524849-24418b99c995738f",
+    "message": "Successfully completed execution flow for order ord_76435",
+    "context": {
+      "status": "SUCCESS"
+    }
+  }
+]

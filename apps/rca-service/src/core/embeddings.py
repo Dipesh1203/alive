@@ -1,4 +1,0 @@
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from dotenv import load_dotenv
-from langchain.vectorstores import Chroma
-from core.documentLoader import load_json_data
