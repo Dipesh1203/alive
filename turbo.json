@@ -7,6 +7,10 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "install-deps": {
+      "inputs": ["pyproject.toml", "uv.lock"],
+      "outputs": [".venv/**"]
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },

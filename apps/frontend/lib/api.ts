@@ -9,6 +9,7 @@ import type {
 } from './mock-data'
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000').replace(/\/$/, '')
+const RCA_URL = process.env.NEXT_PUBLIC_RCA_URL ?? 'http://localhost:8001'
 
 interface ApiWebsite {
   id: string
@@ -74,6 +75,33 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const authToken = getAuthToken()
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      ...(init?.headers ?? {}),
+    },
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+
+    try {
+      const parsed = JSON.parse(errorBody) as { error?: string; message?: string }
+      throw new Error(parsed.error || parsed.message || `Request failed (${response.status})`)
+    } catch {
+      throw new Error(errorBody || `Request failed (${response.status})`)
+    }
+  }
+
+  return response.json() as Promise<T>
+}
+
+async function apiFetchRag<T>(path: string, init?: RequestInit): Promise<T> {
+  const authToken = getAuthToken()
+
+  const response = await fetch(`${RCA_URL}${path}`, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
@@ -598,6 +626,18 @@ export async function fetchLandingPricing(billing: 'monthly' | 'yearly' = 'month
 
 export async function fetchLandingFaqs(): Promise<LandingFAQ[]> {
   return apiFetch<LandingFAQ[]>('/api/public/landing/faqs', {
+    method: 'GET',
+  })
+}
+
+export interface ChatResponse {
+  status: string
+  search_query: string
+  llm_output: string
+}
+
+export async function sendChatMessage(search: string): Promise<ChatResponse> {
+  return apiFetchRag<ChatResponse>(`/api/chat/?search=${encodeURIComponent(search)}`, {
     method: 'GET',
   })
 }

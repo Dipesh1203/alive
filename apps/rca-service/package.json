@@ -1,0 +1,9 @@
+{
+  "name": "rca-service",
+  "version": "1.0.0",
+  "scripts": {
+    "install-deps": "uv sync",
+    "test": "uv run pytest",
+    "dev": "uv run fastapi dev src/main.py --port 8001"
+  }
+}

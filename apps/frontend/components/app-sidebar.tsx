@@ -10,8 +10,8 @@ import {
   LayoutDashboard,
   LogIn,
   LogOut,
+  MessageSquareText,
   Settings,
-  Users,
   Zap,
 } from 'lucide-react'
 import {
@@ -44,6 +44,11 @@ const mainNavItems = [
     title: 'Incidents',
     href: '/incidents',
     icon: Zap,
+  },
+  {
+    title: 'AI Chat',
+    href: '/chat',
+    icon: MessageSquareText,
   },
 ]
 

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from db.chroma_connection import get_vector_store
 from core.llm import analyze_logs
+import traceback
 
 router = APIRouter();
 
@@ -14,6 +15,7 @@ def chat_vector_store(search: str):
       result = retriever.invoke(search);
       log_analyzer = analyze_logs()
       llm_output = log_analyzer.invoke(result)
-      return {"status": "success", "search_query": search,  "llm_output": llm_output.content}
+      return {"status": "success", "search_query": search,  "llm_output": llm_output}
     except Exception as e:
-      raise HTTPException(status_code=500, detail=f"An error occurred while accessing the vector store: {str(e)}")
+      traceback.print_exc()
+      raise HTTPException(status_code=500, detail=f"An error occurred while processing the chat request: {str(e)}")
